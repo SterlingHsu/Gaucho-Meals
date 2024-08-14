@@ -1,0 +1,147 @@
+.fullvh {
+  height: 100vh;
+  width: 100vh;
+}
+
+.body-center {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+  position: absolute;
+  font-family: 'arial'; 
+  top: 50%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+
+.header {
+  display: flex;
+  padding: 0;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+  font-family: 'arial';
+  width: 90%;
+}
+
+.body-center-outline {
+  display: flex;
+  flex-direction: column;
+  border: .2em solid black;
+  border-radius: 25px;
+  padding: .5em;
+  margin: auto;
+  text-align: center;
+  justify-content: center;
+  position: relative;
+  font-family: 'arial'; 
+  width: 50%;
+}
+
+.body-center-wide {
+  display: flex;
+  flex-direction: column;
+  border: .2em solid black;
+  border-radius: 25px;
+  margin: auto;
+  padding: 10px;
+  justify-content: center;
+  align-items: center;
+  width: 80%;
+  font-family: 'arial';
+}
+
+.form-element {
+  display: flex;
+  flex-direction: column;
+  width: 90%;
+}
+
+.form-buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: space-between;
+}
+
+.form-button {
+  border: .1em solid black;
+  border-radius: 5px;
+  margin: 5px;
+  flex: 1;
+}
+
+.submit-button {
+  margin-left: 75%;
+  width: 15%;
+  border-radius: 5px;
+}
+
+.form-input-box {
+  width: 50%;
+}
+
+.body-text3 {
+  font-size: 3em;
+}
+
+.body-text2 {
+  font-size: 2em;
+}
+
+.body-text1 {
+  font-size: 1em;
+}
+
+.centered-form {
+  display: flex;
+  flex-direction: column;
+}
+
+.navbar-custom {
+  background-color: lightgreen;
+}
+
+.options-align-right {
+  margin-left: auto;
+}
+
+.full-screen {
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+}
+
+.my-masonry-grid {
+  display: flex;
+  margin-left: -15px; /* Adjust gutter size as needed */
+  width: auto;
+}
+
+.my-masonry-grid_column {
+  padding-left: 15px; /* Gutter size */
+  background-clip: padding-box;
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+  .my-masonry-grid {
+    margin-left: -10px;
+  }
+  .my-masonry-grid_column {
+    padding-left: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .my-masonry-grid {
+    margin-left: 0;
+  }
+  .my-masonry-grid_column {
+    padding-left: 0;
+  }
+}
+
