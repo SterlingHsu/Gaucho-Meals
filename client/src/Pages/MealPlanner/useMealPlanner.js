@@ -190,7 +190,7 @@ export const useMealPlanner = () => {
           quantity: item.quantity,
         })),
       };
-      console.log("Sending meal data:", JSON.stringify(mealData, null, 2));
+      // console.log("Sending meal data:", JSON.stringify(mealData, null, 2));
       await axios.post(`${apiUrl}/api/meals/save-meal`, mealData, {
         withCredentials: true,
       });

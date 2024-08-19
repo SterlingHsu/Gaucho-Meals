@@ -2,7 +2,7 @@ const express = require("express");
 const { getMeals } = require("../controllers/mealsController");
 const { validateToken, verify, secret } = require("../JWT");
 const { ObjectId } = require("mongodb");
-const UserModel = require("../models/Users");
+const Users = require("../models/Users");
 const Meal = require("../models/Meal");
 const router = express.Router();
 
@@ -26,7 +26,7 @@ router.post("/save-meal", validateToken, async (req, res) => {
       items,
     };
 
-    const user = await UserModel.findOne({ _id: userId }, { plannedMeals: 1 });
+    const user = await Users.findOne({ _id: userId }, { plannedMeals: 1 });
 
     if (!user) {
       return res.status(404).json({ error: "User not found." });
@@ -61,7 +61,7 @@ router.post("/save-meal", validateToken, async (req, res) => {
       }
     }
 
-    await UserModel.updateOne({ _id: userId }, updateQuery);
+    await Users.updateOne({ _id: userId }, updateQuery);
 
     res.status(200).json({ message: "Meal saved successfully" });
   } catch (error) {
@@ -69,6 +69,30 @@ router.post("/save-meal", validateToken, async (req, res) => {
     res
       .status(500)
       .json({ message: "Error saving meal", error: error.message });
+  }
+});
+
+router.delete("/delete-meal/:id", validateToken, async (req, res) => {
+  const id = new ObjectId(req.params.id);
+
+  try {
+    const result = await Users.updateOne(
+      { "plannedMeals._id": id },
+      { $pull: { plannedMeals: { _id: id } } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "Meal not found" });
+    }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ error: "Meal couldn't be deleted" });
+    }
+
+    res.status(200).json({ message: "Meal deleted successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 

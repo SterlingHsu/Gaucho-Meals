@@ -8,12 +8,9 @@ export const useSavedMeals = () => {
 
   const fetchSavedMeals = useCallback(async () => {
     try {
-      const response = await axios.get(
-        `${apiUrl}/api/users/saved-meals`,
-        {
-          withCredentials: true,
-        }
-      );
+      const response = await axios.get(`${apiUrl}/api/users/saved-meals`, {
+        withCredentials: true,
+      });
       const savedMeals = response.data.plannedMeals;
 
       const mealsWithDetails = await Promise.all(
@@ -46,8 +43,9 @@ export const useSavedMeals = () => {
   }, [fetchSavedMeals]);
 
   const deleteSavedMeal = useCallback(async (mealId) => {
+    console.log(mealId);
     try {
-      await axios.delete(`${apiUrl}api/meals/delete-meal/${mealId}`, {
+      await axios.delete(`${apiUrl}/api/meals/delete-meal/${mealId}`, {
         withCredentials: true,
       });
       setSavedMeals((prevMeals) =>
