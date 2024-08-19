@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Navbar from "../../Components/Navbar";
 import "../../Static/Styles/styles.css";
+import validator from "validator";
+import zxcvbn from "zxcvbn";
 
 const Signup = () => {
   const navigate = useNavigate();
@@ -12,35 +14,60 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [firstName, setFirstName] = useState("");
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [error, setError] = useState("");
+
+  const handlePasswordChange = (e) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    setPasswordStrength(zxcvbn(newPassword).score);
+  };
 
   const submit = (e) => {
-    //TODO: Add error checking for invalid sign-up arguments
     e.preventDefault();
+    setError(""); // Clear previous errors
 
     if (!email || !password || !confirmPassword || !firstName) {
-      alert("Please fill in all fields.");
+      setError("Please fill in all fields.");
       return;
     }
 
-    Axios.post(`${apiUrl}/api/auth/sign-up`, {
-      email: email,
-      password: password,
-      confirmPassword: confirmPassword,
-      firstName: firstName,
-    }, { withCredentials: true })
+    if (!validator.isEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (passwordStrength < 3) {
+      setError("Please choose a stronger password.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords do not match. Please try again.");
+      return;
+    }
+
+    Axios.post(
+      `${apiUrl}/api/auth/sign-up`,
+      {
+        email: email,
+        password: password,
+        confirmPassword: confirmPassword,
+        firstName: firstName,
+      },
+      { withCredentials: true }
+    )
       .then((res) => {
         if (res.data === "User Already Exists") {
-          alert(
+          setError(
             "These credentials are already associated with an existing account."
           );
-        } else if (res.data === "Passwords Do Not Match") {
-          alert("Passwords do not match. Please try again.");
         } else if (res.data === "Successfully Signed Up User") {
           navigate("/meal-planner");
         }
       })
       .catch((e) => {
-        alert("An error occured. Please try again.");
+        setError("An error occurred. Please try again.");
         console.log(e);
       });
   };
@@ -49,8 +76,13 @@ const Signup = () => {
     <body className="d-flex flex-column vh-100">
       <Navbar />
       <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
-        <form className="border border-secondary-subtle p-4 rounded">
+        <form className="border border-secondary-subtle p-4 rounded shadow-sm">
           <h3 align="center">Sign Up</h3>
+          {error && (
+            <div className="alert alert-danger" role="alert">
+              {error}
+            </div>
+          )}
           <div className="mb-2">
             <label htmlFor="email">Email Address</label>
             <input
@@ -59,9 +91,7 @@ const Signup = () => {
               id="email"
               name="email"
               placeholder="Enter email"
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
+              onChange={(e) => setEmail(e.target.value)}
             />
           </div>
 
@@ -73,9 +103,7 @@ const Signup = () => {
               id="firstName"
               name="firstName"
               placeholder="Enter first name"
-              onChange={(e) => {
-                setFirstName(e.target.value);
-              }}
+              onChange={(e) => setFirstName(e.target.value)}
             />
           </div>
 
@@ -87,10 +115,18 @@ const Signup = () => {
               id="password1"
               name="password1"
               placeholder="Enter password"
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
+              onChange={handlePasswordChange}
             />
+            {password && (
+              <small className="form-text text-muted">
+                Password strength:{" "}
+                {
+                  ["Very weak", "Weak", "Fair", "Strong", "Very strong"][
+                    passwordStrength
+                  ]
+                }
+              </small>
+            )}
           </div>
 
           <div className="form-group">
@@ -103,9 +139,7 @@ const Signup = () => {
               placeholder="Confirm password"
               autoComplete="new-password"
               required
-              onChange={(e) => {
-                setConfirmPassword(e.target.value);
-              }}
+              onChange={(e) => setConfirmPassword(e.target.value)}
             />
           </div>
           <br />

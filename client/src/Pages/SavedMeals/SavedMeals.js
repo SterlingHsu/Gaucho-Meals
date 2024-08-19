@@ -58,14 +58,14 @@ const SavedMeals = () => {
   return (
     <>
       <Navbar />
-      <div className="container-fluid px-5 mt-3">
+      <div className="h-100 container-fluid px-5 mt-3">
         <h2 className="fw-bold mb-3">Saved Meals</h2>
         {savedMeals.length === 0 ? (
           <div className="text-center">
             <img
               src={mapachesad}
               alt="Sad Mapache"
-              className="img-fluid mb-3"
+              className="img-fluid"
               style={{ maxWidth: "500px" }}
             />
             <h1>No meals saved yet!</h1>

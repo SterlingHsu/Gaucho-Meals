@@ -7,17 +7,20 @@ const Login = () => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
 
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const submit = (e) => {
     e.preventDefault();
     axios
-      .post(`${apiUrl}/api/auth/login`, {
-        email,
-        password,
-      }, { withCredentials: true })
+      .post(
+        `${apiUrl}/api/auth/login`,
+        {
+          email,
+          password,
+        },
+        { withCredentials: true }
+      )
       .then((res) => {
         if (res.data === "Success") {
           navigate("/meal-planner");
@@ -39,7 +42,10 @@ const Login = () => {
     <div className="d-flex flex-column vh-100">
       <Navbar />
       <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
-        <form method="POST" className="border border-secondary-subtle p-4 rounded">
+        <form
+          method="POST"
+          className="border border-secondary-subtle p-4 rounded shadow-sm"
+        >
           <h3 align="left">Log In</h3>
           <div className="mb-3">
             <label htmlFor="email">Email Address</label>
