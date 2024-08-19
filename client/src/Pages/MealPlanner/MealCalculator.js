@@ -32,7 +32,7 @@ export const MealCalculator = ({
     calculateNutritionalInfo();
 
   return (
-    <div id="calculator" className="border p-3">
+    <div id="calculator" className="border p-3 shadow-sm rounded">
       <h4>Selected Items</h4>
       <ul id="selected-items" className="list-group mb-3">
         {Object.values(selectedItems).map((item) => (

@@ -65,18 +65,18 @@ const UserSurvey = () => {
   return (
     <div class="d-flex flex-column vh-100">
       <div class="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
-        <div class="header">
+        <div class="">
           <p class="body-text2">
             It's nice to meet you! Start supporting your nutrition goals by
             telling us a little bit about you.
           </p>
         </div>
         <form method="POST" class="border border-secondary-subtle p-4">
-          <div class="form-element">
+          <div class="">
             <label for="nutrition-goal" class="body-text2">
               What's your nutrition goal?
             </label>
-            <div class="form-buttons mb-2">
+            <div class=" mb-2">
               <button
                 type="button"
                 class={`btn btn-${
@@ -100,7 +100,7 @@ const UserSurvey = () => {
                 Gain weight
               </button>
             </div>
-            <div class="form-buttons mb-2">
+            <div class=" mb-2">
               <button
                 type="button"
                 class={`btn btn-${
@@ -125,11 +125,11 @@ const UserSurvey = () => {
               </button>
             </div>
           </div>
-          <div class="form-element">
+          <div class="">
             <label for="nutrition-goal" class="body-text2">
               Please select if you are any of the following:
             </label>
-            <div class="form-buttons">
+            <div class="">
               <button
                 type="button"
                 class={`btn btn-${
@@ -153,7 +153,7 @@ const UserSurvey = () => {
                 Vegan
               </button>
             </div>
-            <div class="form-buttons mb-2">
+            <div class=" mb-2">
               <button
                 type="button"
                 class={`btn btn-${
@@ -178,7 +178,7 @@ const UserSurvey = () => {
               </button>
             </div>
           </div>
-          <div class="form-element">
+          <div class="">
             <label for="nutrition-goal" class="body-text2">
               What is your target daily caloric intake?
             </label>
@@ -186,11 +186,11 @@ const UserSurvey = () => {
               onChange={(e) => {
                 setDailyCaloricIntake(e.target.value);
               }}
-              class="form-input-box"
+              class=""
               placeholder="Daily Caloric Intake"
             ></input>
           </div>
-          <button class="submit-button" type="submit" onClick={submit}>
+          <button class="" type="submit" onClick={submit}>
             Submit
           </button>
         </form>

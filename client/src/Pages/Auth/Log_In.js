@@ -39,7 +39,7 @@ const Login = () => {
     <div className="d-flex flex-column vh-100">
       <Navbar />
       <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
-        <form method="POST" className="border border-secondary-subtle p-4">
+        <form method="POST" className="border border-secondary-subtle p-4 rounded">
           <h3 align="left">Log In</h3>
           <div className="mb-3">
             <label htmlFor="email">Email Address</label>

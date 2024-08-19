@@ -10,42 +10,39 @@ export const SelectionForm = ({
   getMealTimes,
 }) => {
   return (
-    <div>
-      <div className="mb-3">
-        <label htmlFor="diningHallSelect" className="form-label">
-          Select Dining Hall:
-        </label>
-        <select
-          id="diningHallSelect"
-          className="form-select bg-light text-dark"
-          onChange={(e) => {
-            handleDiningHallChange(e.target.value);
-          }}
-          value={selectedDiningHall}
-        >
-          <option value=""> Select a Dining Hall </option>
-          {getDiningHalls.map((diningHall, index) => (
-            <option key={index} value={diningHall}>
-              {diningHall}
-            </option>
-          ))}
-        </select>
-      </div>
-      {selectedDiningHall && (
-        <div className="mb-3">
-          <label htmlFor="daySelect" className="form-label">
+    <div className="container mt-3 pb-4">
+      <div className="row g-3 align-items-end">
+        <div className="col-md-4">
+          <label htmlFor="diningHallSelect" className="form-label fw-bold">
+            Select Dining Hall:
+          </label>
+          <select
+            id="diningHallSelect"
+            className="form-select form-select-lg shadow-sm"
+            onChange={(e) => handleDiningHallChange(e.target.value)}
+            value={selectedDiningHall}
+          >
+            <option value="">Select a Dining Hall</option>
+            {getDiningHalls.map((diningHall, index) => (
+              <option key={index} value={diningHall}>
+                {diningHall}
+              </option>
+            ))}
+          </select>
+        </div>
+        
+        <div className="col-md-4">
+          <label htmlFor="daySelect" className="form-label fw-bold">
             Select Day:
           </label>
           <select
             id="daySelect"
-            className="form-select bg-light text-dark"
-            onChange={(e) => {
-              handleDayChange(e.target.value);
-            }}
+            className="form-select form-select-lg shadow-sm"
+            onChange={(e) => handleDayChange(e.target.value)}
             value={selectedDay}
             disabled={!selectedDiningHall}
           >
-            <option value=""> Select a Day </option>
+            <option value="">Select a Day</option>
             {getDays.map((day, index) => (
               <option key={index} value={day}>
                 {day}
@@ -53,22 +50,19 @@ export const SelectionForm = ({
             ))}
           </select>
         </div>
-      )}
-      {selectedDiningHall && (
-        <div className="mb-3">
-          <label htmlFor="mealTimeSelect" className="form-label">
+        
+        <div className="col-md-4">
+          <label htmlFor="mealTimeSelect" className="form-label fw-bold">
             Select Meal Time:
           </label>
           <select
             id="mealTimeSelect"
-            className="form-select bg-light text-dark"
-            onChange={(e) => {
-              handleMealTimeChange(e.target.value);
-            }}
+            className="form-select form-select-lg shadow-sm"
+            onChange={(e) => handleMealTimeChange(e.target.value)}
             value={selectedMealTime}
             disabled={!selectedDay}
           >
-            <option value=""> Select a Meal Time </option>
+            <option value="">Select a Meal Time</option>
             {getMealTimes.map((mealTime, index) => (
               <option key={index} value={mealTime}>
                 {mealTime}
@@ -76,7 +70,7 @@ export const SelectionForm = ({
             ))}
           </select>
         </div>
-      )}
+      </div>
     </div>
   );
 };

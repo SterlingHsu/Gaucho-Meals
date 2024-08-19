@@ -49,9 +49,9 @@ const Signup = () => {
     <body className="d-flex flex-column vh-100">
       <Navbar />
       <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
-        <form className="border border-secondary-subtle p-4">
+        <form className="border border-secondary-subtle p-4 rounded">
           <h3 align="center">Sign Up</h3>
-          <div className="form-group">
+          <div className="mb-2">
             <label htmlFor="email">Email Address</label>
             <input
               type="email"
@@ -65,7 +65,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="mb-2">
             <label htmlFor="firstName">First Name</label>
             <input
               type="text"
@@ -79,7 +79,7 @@ const Signup = () => {
             />
           </div>
 
-          <div className="form-group">
+          <div className="mb-2">
             <label htmlFor="password1">Password</label>
             <input
               type="password"
