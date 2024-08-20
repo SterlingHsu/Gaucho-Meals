@@ -6,7 +6,7 @@ const { createTokens, validateToken } = require("../JWT");
 const router = express.Router();
 
 router.get("/check", validateToken, (req, res) => {
-  console.log("Authenticated")
+  console.log("Authenticated");
   res.status(200).json({ authenticated: true });
 });
 
@@ -30,6 +30,8 @@ router.post("/login", async (req, res) => {
     res.cookie("access-token", accessToken, {
       maxAge: 604800000,
       httpOnly: true,
+      secure: true,
+      sameSite: "None",
     });
     return res.json("Success");
   } catch (error) {
@@ -66,6 +68,8 @@ router.post("/sign-up", async (req, res) => {
     res.cookie("access-token", accessToken, {
       maxAge: 604800000,
       httpOnly: true,
+      secure: true,
+      sameSite: "None",
     });
 
     return res.json("Successfully Signed Up User");
