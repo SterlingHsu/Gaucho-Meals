@@ -6,6 +6,7 @@ const { createTokens, validateToken } = require("../JWT");
 const router = express.Router();
 
 router.get("/check", validateToken, (req, res) => {
+  console.log("Authenticated")
   res.status(200).json({ authenticated: true });
 });
 
@@ -72,10 +73,6 @@ router.post("/sign-up", async (req, res) => {
     console.error("Sign-up error:", error);
     return res.status(500).json("An error occured during sign-up");
   }
-});
-
-router.get("/check", validateToken, (req, res) => {
-  res.status(200).json({ authenticated: true });
 });
 
 router.post("/logout", async (req, res) => {

@@ -37,7 +37,7 @@ const Signup = () => {
       return;
     }
 
-    if (passwordStrength < 3) {
+    if (passwordStrength < 2) {
       setError("Please choose a stronger password.");
       return;
     }
@@ -73,7 +73,7 @@ const Signup = () => {
   };
 
   return (
-    <body className="d-flex flex-column vh-100">
+    <div className="d-flex flex-column vh-100">
       <Navbar />
       <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
         <form className="border border-secondary-subtle p-4 rounded shadow-sm">
@@ -148,7 +148,7 @@ const Signup = () => {
           </button>
         </form>
       </div>
-    </body>
+    </div>
   );
 };
 
