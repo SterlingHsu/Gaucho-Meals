@@ -3,6 +3,7 @@ import axios from "axios";
 
 export const useSavedMeals = () => {
   const [savedMeals, setSavedMeals] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
@@ -42,6 +43,15 @@ export const useSavedMeals = () => {
     fetchSavedMeals();
   }, [fetchSavedMeals]);
 
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      await fetchSavedMeals();
+      setLoading(false);
+    };
+    fetchData();
+  }, [fetchSavedMeals]);
+
   const deleteSavedMeal = useCallback(async (mealId) => {
     console.log(mealId);
     try {
@@ -57,5 +67,5 @@ export const useSavedMeals = () => {
     // eslint-disable-next-line
   }, []);
 
-  return { savedMeals, fetchSavedMeals, deleteSavedMeal };
+  return { savedMeals, fetchSavedMeals, deleteSavedMeal, loading };
 };

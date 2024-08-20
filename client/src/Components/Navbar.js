@@ -105,12 +105,12 @@ const MainNavbar = () => {
                 </>
               ) : (
                 <>
-                  <Nav.Link as={Link} to="/login">
+                  <Nav.Link as={Link} to="/login" className="me-2">
                     <FontAwesomeIcon icon={faSignIn} className="me-2" /> Login
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/sign-up">
-                    <FontAwesomeIcon icon={faUserPlus} className="me-2" /> Sign
-                    Up
+                  <Nav.Link as={Link} to="/sign-up" style={{ backgroundColor: "#00FF00", borderRadius: "10px" }}>
+                    <FontAwesomeIcon icon={faUserPlus} className="me-2" />
+                    Sign Up
                   </Nav.Link>
                 </>
               )}

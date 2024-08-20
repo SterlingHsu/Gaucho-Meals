@@ -8,7 +8,7 @@ import mapachesad from "../../Static/img/mapachesad.png";
 
 const SavedMeals = () => {
   const navigate = useNavigate();
-  const { savedMeals, deleteSavedMeal } = useSavedMeals();
+  const { savedMeals, deleteSavedMeal, loading } = useSavedMeals();
 
   const calculateTotalNutrition = (items) => {
     let totalCalories = 0,
@@ -60,7 +60,9 @@ const SavedMeals = () => {
       <Navbar />
       <div className="h-100 container-fluid px-5 mt-3">
         <h2 className="fw-bold mb-3">Saved Meals</h2>
-        {savedMeals.length === 0 ? (
+        {loading ? (
+          <h1>Loading saved meals...</h1>
+        ) : savedMeals.length === 0 ? (
           <div className="text-center">
             <img
               src={mapachesad}

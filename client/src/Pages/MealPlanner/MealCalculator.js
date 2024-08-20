@@ -74,7 +74,7 @@ export const MealCalculator = ({
           </button>
         ) : (
           <div>
-            <button className="btn btn-primary mr-1" onClick={() => editMeal()}>
+            <button className="btn btn-primary me-2" onClick={() => editMeal()}>
               Edit Meal
             </button>
             <button className="btn btn-success"> Saved ✅</button>
