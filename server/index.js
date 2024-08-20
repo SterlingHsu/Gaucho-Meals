@@ -8,6 +8,11 @@ const app = express();
 
 console.log(process.env.NODE_ENV);
 
+const allowedOrigins = [
+  process.env.FRONTEND_URL_PROD,
+  process.env.FRONTEND_URL_DEV,
+];
+
 app.use(
   cors({
     origin: (origin, callback) => {
