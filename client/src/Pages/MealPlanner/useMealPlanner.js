@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 
 export const useMealPlanner = () => {
+  const [loading, setLoading] = useState(true);
   const [meals, setMeals] = useState([]);
   const [selectedItems, setSelectedItems] = useState(() => {
     const savedItems = localStorage.getItem("selectedItems");
@@ -60,9 +61,11 @@ export const useMealPlanner = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
+      setLoading(true);
       try {
         const response = await axios.get(`${apiUrl}/api/meals/get-meals`);
         setMeals(response.data);
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching meals:", error);
       }
@@ -259,6 +262,7 @@ export const useMealPlanner = () => {
   );
 
   return {
+    loading,
     meals,
     setMeals,
     selectedItems,

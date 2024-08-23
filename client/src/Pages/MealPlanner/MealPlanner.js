@@ -9,6 +9,7 @@ import { useLocation } from "react-router-dom";
 
 const MealPlanner = () => {
   const {
+    loading,
     // meals,
     // setMeals,
     selectedItems,
@@ -73,23 +74,29 @@ const MealPlanner = () => {
         <div className="row">
           <div className="col-md-9">
             <h2>Meal Planner</h2>
-            <SelectionForm
-              selectedDiningHall={selectedDiningHall}
-              selectedDay={selectedDay}
-              selectedMealTime={selectedMealTime}
-              handleDiningHallChange={handleDiningHallChange}
-              handleDayChange={handleDayChange}
-              handleMealTimeChange={handleMealTimeChange}
-              getDiningHalls={getDiningHalls}
-              getDays={getDays}
-              getMealTimes={getMealTimes}
-            ></SelectionForm>
-            <MenuItems
-              getCategorizedItems={getCategorizedItems}
-              addItemToCalculator={addItemToCalculator}
-              showIngredients={showIngredients}
-              isMealSaved={isMealSaved}
-            ></MenuItems>
+            {loading ? (
+              <h1>Retrieving data...</h1>
+            ) : (
+              <>
+                <SelectionForm
+                  selectedDiningHall={selectedDiningHall}
+                  selectedDay={selectedDay}
+                  selectedMealTime={selectedMealTime}
+                  handleDiningHallChange={handleDiningHallChange}
+                  handleDayChange={handleDayChange}
+                  handleMealTimeChange={handleMealTimeChange}
+                  getDiningHalls={getDiningHalls}
+                  getDays={getDays}
+                  getMealTimes={getMealTimes}
+                ></SelectionForm>
+                <MenuItems
+                  getCategorizedItems={getCategorizedItems}
+                  addItemToCalculator={addItemToCalculator}
+                  showIngredients={showIngredients}
+                  isMealSaved={isMealSaved}
+                ></MenuItems>
+              </>
+            )}
           </div>
           <div
             className="col-md-3"
