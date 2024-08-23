@@ -44,5 +44,5 @@ app.use("/api/others", otherRoutes);
 app.use("/api/meals", mealRoutes);
 
 app.listen(PORT, () => {
-  console.log(`You are connected! Running on ${PORT}`);
+  console.log(`Connected! Running on ${PORT}`);
 });

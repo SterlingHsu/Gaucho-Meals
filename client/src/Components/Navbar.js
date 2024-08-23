@@ -14,7 +14,11 @@ import {
 import mapachehat from "../Static/img/mapachehat.png";
 
 const MainNavbar = () => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return JSON.parse(localStorage.getItem("isAuthenticated")) || false;
+  }); 
+  // Store in local storage to prevent screen-tearing as the auth state is being determined
+  // Crude fix, consider an improvement
 
   const navigate = useNavigate();
 
@@ -34,12 +38,18 @@ const MainNavbar = () => {
       if (response.ok) {
         const data = await response.json();
         setIsAuthenticated(data.authenticated);
+        localStorage.setItem(
+          "isAuthenticated",
+          JSON.stringify(data.authenticated)
+        );
       } else {
         setIsAuthenticated(false);
+        localStorage.setItem("isAuthenticated", "false");
       }
     } catch (error) {
       console.error("Auth check error:", error);
       setIsAuthenticated(false);
+      localStorage.setItem("isAuthenticated", "false");
     }
   };
 
@@ -51,6 +61,7 @@ const MainNavbar = () => {
       });
       if (response.ok) {
         setIsAuthenticated(false);
+        localStorage.setItem("isAuthenticated", "false");
         navigate("/");
       } else {
         const errorData = await response.json();
@@ -108,7 +119,16 @@ const MainNavbar = () => {
                   <Nav.Link as={Link} to="/login" className="me-2">
                     <FontAwesomeIcon icon={faSignIn} className="me-2" /> Login
                   </Nav.Link>
-                  <Nav.Link as={Link} to="/sign-up" style={{ backgroundColor: "#00FF00", borderRadius: "10px" }}>
+                  <Nav.Link
+                    as={Link}
+                    to="/sign-up"
+                    className="px-2"
+                    style={{
+                      width: "max-content",
+                      backgroundColor: "#00FF00",
+                      borderRadius: "10px",
+                    }}
+                  >
                     <FontAwesomeIcon icon={faUserPlus} className="me-2" />
                     Sign Up
                   </Nav.Link>

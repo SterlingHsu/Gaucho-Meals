@@ -59,9 +59,9 @@ const SavedMeals = () => {
     <>
       <Navbar />
       <div className="h-100 container-fluid px-5 mt-3">
-        <h2 className="fw-bold mb-3">Saved Meals</h2>
+        <h2 className="fw-bold mb-3">Planned Meals</h2>
         {loading ? (
-          <h1>Loading saved meals...</h1>
+          <h1>Loading planned meals...</h1>
         ) : savedMeals.length === 0 ? (
           <div className="text-center">
             <img
@@ -70,7 +70,7 @@ const SavedMeals = () => {
               className="img-fluid"
               style={{ maxWidth: "500px" }}
             />
-            <h1>No meals saved yet!</h1>
+            <h1>No meals planned yet!</h1>
           </div>
         ) : (
           Object.entries(groupMealsByDate(savedMeals)).map(

@@ -6,7 +6,6 @@ const { createTokens, validateToken } = require("../JWT");
 const router = express.Router();
 
 router.get("/check", validateToken, (req, res) => {
-  console.log("Authenticated");
   res.status(200).json({ authenticated: true });
 });
 

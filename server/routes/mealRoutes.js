@@ -127,4 +127,34 @@ router.get("/item/:id", async (req, res) => {
   }
 });
 
+router.get("/primary-items", async (req, res) => {
+  try {
+    const currentDate = new Date().toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+
+    const primaryItems = await Meal.aggregate([
+      { $unwind: "$days" },
+      { $match: { "days.day": currentDate } },
+      { $unwind: "$days.mealTimes" },
+      {
+        $project: {
+          _id: 0,
+          diningHall: 1,
+          mealTime: "$days.mealTimes.mealTime",
+          primaryItems: "$days.mealTimes.primaryItems",
+        },
+      },
+    ]);
+
+    res.json({ primaryItems: primaryItems});
+  } catch (error) {
+    console.error("Error fetching primary items:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 module.exports = router;
