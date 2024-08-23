@@ -10,6 +10,10 @@
 # testing
 /coverage
 
+# scraper
+/scripts/run_scraper.bat
+/scripts/scraper_log.txt
+
 # production
 /client/build
 

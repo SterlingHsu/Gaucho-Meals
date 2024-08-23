@@ -351,7 +351,6 @@ def save_to_db(data):
                             meal_time_doc["primaryItems"] = items
                         else:
                             for item in items:
-                                print(item)
                                 item_doc = {
                                     "_id": ObjectId(),
                                     "name": item["Item"],
@@ -374,7 +373,6 @@ def daily_update_db(data):
     
     for dining_hall, new_day_data in data.items():
         doc = meals_collection.find_one({"diningHall": dining_hall})
-        print(doc)
         if dining_hall == "Take Out at Ortega Commons":
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
@@ -463,6 +461,6 @@ def format_new_ortega_day(day_data):
     return categories
 
 if __name__ == "__main__":
-    menu = getMenu(get_most_recent_only=False)
-    save_to_db(menu)
+    menu = getMenu(get_most_recent_only=True)
+    daily_update_db(menu)
 
