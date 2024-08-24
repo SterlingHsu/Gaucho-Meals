@@ -46,11 +46,16 @@ const SavedMeals = () => {
   };
 
   function groupMealsByDate(meals) {
+    const mealOrder = ["Breakfast", "Lunch", "Dinner"];
+
     return meals.reduce((acc, meal) => {
       if (!acc[meal.day]) {
         acc[meal.day] = [];
       }
       acc[meal.day].push(meal);
+      acc[meal.day].sort(
+        (a, b) => mealOrder.indexOf(a.mealTime) - mealOrder.indexOf(b.mealTime)
+      );
       return acc;
     }, {});
   }
