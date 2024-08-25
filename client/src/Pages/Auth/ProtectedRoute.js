@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.API_URL}/api/auth/check`, {
+      .get(`${process.env.REACT_APP_API_URL}/api/auth/check`, {
         withCredentials: true,
       })
       .then(() => setIsAuthenticated(true))

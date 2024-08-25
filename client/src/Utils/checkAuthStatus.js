@@ -1,5 +1,5 @@
 export const checkAuthStatus = async () => {
-  const apiUrl = process.env.API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   try {
     const response = await fetch(`${apiUrl}/api/auth/check`, {

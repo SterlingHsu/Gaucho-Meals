@@ -60,7 +60,7 @@ export const useMealPlanner = () => {
     setIsMealSaved(false);
   }, []);
 
-  const apiUrl = process.env.API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     const fetchMeals = async () => {

@@ -14,7 +14,7 @@ const Home = () => {
 
   const [primaryItems, setPrimaryItems] = useState([]);
 
-  const apiUrl = process.env.API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchPrimaryItems = useCallback(async () => {
     try {

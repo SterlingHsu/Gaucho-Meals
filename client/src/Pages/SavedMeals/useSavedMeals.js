@@ -5,7 +5,7 @@ export const useSavedMeals = () => {
   const [savedMeals, setSavedMeals] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const apiUrl = process.env.API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const fetchSavedMeals = useCallback(async () => {
     try {

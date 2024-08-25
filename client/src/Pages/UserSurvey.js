@@ -5,7 +5,7 @@ import "../Static/Styles/styles.css";
 
 const UserSurvey = () => {
   const navigate = useNavigate();
-  const apiUrl = process.env.API_URL;
+  const apiUrl = process.env.REACT_APP_API_URL;
 
   const [nutritionGoal, setNutritionGoal] = useState("");
   const [dietaryRestriction, setDietaryRestriction] = useState("");
