@@ -9,6 +9,7 @@ import zxcvbn from "zxcvbn";
 const Signup = () => {
   const navigate = useNavigate();
   const apiUrl = process.env.REACT_APP_API_URL;
+  console.log(apiUrl)
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
