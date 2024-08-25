@@ -14,14 +14,14 @@ const Home = () => {
 
   const [primaryItems, setPrimaryItems] = useState([]);
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.API_URL;
 
   const fetchPrimaryItems = useCallback(async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/meals/primary-items`, {
         withCredentials: true,
       });
-      console.log(response.data);
+      // console.log(response.data);
       setPrimaryItems(response.data.primaryItems);
     } catch (err) {
       console.error("Error fetching primary items:", err);

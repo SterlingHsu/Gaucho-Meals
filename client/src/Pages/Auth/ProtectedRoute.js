@@ -8,7 +8,7 @@ const ProtectedRoute = ({ children }) => {
 
   useEffect(() => {
     axios
-      .get(`${process.env.REACT_APP_API_URL}/api/auth/check`, {
+      .get(`${process.env.API_URL}/api/auth/check`, {
         withCredentials: true,
       })
       .then(() => setIsAuthenticated(true))
@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  
+
   return isAuthenticated ? children : <Navigate to="/forbidden-page" />;
 };
 

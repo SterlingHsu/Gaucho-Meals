@@ -5,7 +5,7 @@ import "../Static/Styles/styles.css";
 
 const UserSurvey = () => {
   const navigate = useNavigate();
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.API_URL;
 
   const [nutritionGoal, setNutritionGoal] = useState("");
   const [dietaryRestriction, setDietaryRestriction] = useState("");
@@ -29,7 +29,7 @@ const UserSurvey = () => {
     console.log("Nutrition Goal:", nutritionGoal);
     console.log("Dietary Restriction:", dietaryRestriction);
     console.log("Daily Caloric Intake:", dailyCaloricIntake);
-    
+
     axios
       .post(`${apiUrl}/user-survey`, {
         nutritionGoal,

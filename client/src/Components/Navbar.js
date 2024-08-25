@@ -16,13 +16,13 @@ import mapachehat from "../Static/img/mapachehat.png";
 const MainNavbar = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
     return JSON.parse(localStorage.getItem("isAuthenticated")) || false;
-  }); 
+  });
   // Store in local storage to prevent screen-tearing as the auth state is being determined
   // Crude fix, consider an improvement
 
   const navigate = useNavigate();
 
-  const apiUrl = process.env.REACT_APP_API_URL;
+  const apiUrl = process.env.API_URL;
 
   useEffect(() => {
     checkAuthStatus();
@@ -61,7 +61,7 @@ const MainNavbar = () => {
       });
       if (response.ok) {
         setIsAuthenticated(false);
-        localStorage.clear(); 
+        localStorage.clear();
         navigate("/");
       } else {
         const errorData = await response.json();
