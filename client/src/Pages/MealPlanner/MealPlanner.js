@@ -73,30 +73,29 @@ const MealPlanner = () => {
       <div className="container-fluid mt-4 px-5">
         <div className="row">
           <div className="col-md-9">
-            <h2>Meal Planner</h2>
-            {loading ? (
-              <h1>Retrieving data...</h1>
-            ) : (
-              <>
-                <SelectionForm
-                  selectedDiningHall={selectedDiningHall}
-                  selectedDay={selectedDay}
-                  selectedMealTime={selectedMealTime}
-                  handleDiningHallChange={handleDiningHallChange}
-                  handleDayChange={handleDayChange}
-                  handleMealTimeChange={handleMealTimeChange}
-                  getDiningHalls={getDiningHalls}
-                  getDays={getDays}
-                  getMealTimes={getMealTimes}
-                ></SelectionForm>
-                <MenuItems
-                  getCategorizedItems={getCategorizedItems}
-                  addItemToCalculator={addItemToCalculator}
-                  showIngredients={showIngredients}
-                  isMealSaved={isMealSaved}
-                ></MenuItems>
-              </>
+            <h2 style={{ display: "inline", marginRight: "15px" }}>
+              Meal Planner
+            </h2>
+            {loading && (
+              <span style={{ fontStyle: "italic" }}>Updating data...</span>
             )}
+            <SelectionForm
+              selectedDiningHall={selectedDiningHall}
+              selectedDay={selectedDay}
+              selectedMealTime={selectedMealTime}
+              handleDiningHallChange={handleDiningHallChange}
+              handleDayChange={handleDayChange}
+              handleMealTimeChange={handleMealTimeChange}
+              getDiningHalls={getDiningHalls}
+              getDays={getDays}
+              getMealTimes={getMealTimes}
+            ></SelectionForm>
+            <MenuItems
+              getCategorizedItems={getCategorizedItems}
+              addItemToCalculator={addItemToCalculator}
+              showIngredients={showIngredients}
+              isMealSaved={isMealSaved}
+            ></MenuItems>
           </div>
           <div
             className="col-md-3"

@@ -12,27 +12,10 @@ export const useSavedMeals = () => {
       const response = await axios.get(`${apiUrl}/api/users/saved-meals`, {
         withCredentials: true,
       });
+
       const savedMeals = response.data.plannedMeals;
 
-      const mealsWithDetails = await Promise.all(
-        savedMeals.map(async (meal) => {
-          const itemsWithDetails = await Promise.all(
-            meal.items.map(async (item) => {
-              const itemResponse = await axios.get(
-                `${apiUrl}/api/meals/item/${item._id}`
-              );
-              return { ...itemResponse.data, quantity: item.quantity };
-            })
-          );
-
-          return {
-            ...meal,
-            items: itemsWithDetails,
-          };
-        })
-      );
-
-      setSavedMeals(mealsWithDetails);
+      setSavedMeals(savedMeals);
     } catch (err) {
       console.error("Error fetching saved meals:", err);
     }

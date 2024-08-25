@@ -23,7 +23,7 @@ const Login = () => {
       )
       .then((res) => {
         if (res.data === "Success") {
-          navigate("/meal-planner");
+          navigate("/");
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");
         } else if (

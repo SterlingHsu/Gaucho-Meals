@@ -61,7 +61,7 @@ const MainNavbar = () => {
       });
       if (response.ok) {
         setIsAuthenticated(false);
-        localStorage.setItem("isAuthenticated", "false");
+        localStorage.clear(); 
         navigate("/");
       } else {
         const errorData = await response.json();

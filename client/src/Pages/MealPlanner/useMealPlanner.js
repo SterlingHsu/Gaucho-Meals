@@ -3,7 +3,10 @@ import axios from "axios";
 
 export const useMealPlanner = () => {
   const [loading, setLoading] = useState(true);
-  const [meals, setMeals] = useState([]);
+  const [meals, setMeals] = useState(() => {
+    const storedMeals = localStorage.getItem("meals");
+    return storedMeals ? JSON.parse(storedMeals) : [];
+  });
   const [selectedItems, setSelectedItems] = useState(() => {
     const savedItems = localStorage.getItem("selectedItems");
     return savedItems ? JSON.parse(savedItems) : {};
@@ -61,13 +64,14 @@ export const useMealPlanner = () => {
 
   useEffect(() => {
     const fetchMeals = async () => {
-      setLoading(true);
       try {
         const response = await axios.get(`${apiUrl}/api/meals/get-meals`);
         setMeals(response.data);
-        setLoading(false);
+        localStorage.setItem("meals", JSON.stringify(response.data));
       } catch (error) {
         console.error("Error fetching meals:", error);
+      } finally {
+        setLoading(false);
       }
     };
     fetchMeals();
@@ -190,7 +194,12 @@ export const useMealPlanner = () => {
         mealTime: selectedMealTime,
         items: Object.values(selectedItems).map((item) => ({
           _id: item._id.$oid || item._id.toString(),
+          name: item.name,
           quantity: item.quantity,
+          calories: item.nutritionalInfo.Calories,
+          protein: item.nutritionalInfo.Protein,
+          fat: item.nutritionalInfo["Total Fat"],
+          carbs: item.nutritionalInfo["Total Carbohydrate"],
         })),
       };
       // console.log("Sending meal data:", JSON.stringify(mealData, null, 2));
@@ -198,7 +207,6 @@ export const useMealPlanner = () => {
         withCredentials: true,
       });
       setIsMealSaved(true);
-      // Checks for res
     } catch (error) {
       console.error(
         "Error saving meal:",

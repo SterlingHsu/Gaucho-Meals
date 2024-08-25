@@ -17,9 +17,9 @@ const SavedMeals = () => {
     year: "numeric",
   });
 
-  const groupMealsByDate = (meals) => {
+  const groupMealsByDate = (savedMeals) => {
     const mealOrder = ["Breakfast", "Lunch", "Dinner"];
-    const groupedMeals = meals.reduce((acc, meal) => {
+    const groupedMeals = savedMeals.reduce((acc, meal) => {
       if (!acc[meal.day]) {
         acc[meal.day] = [];
       }
@@ -49,11 +49,10 @@ const SavedMeals = () => {
       totalCarbs = 0;
 
     items.forEach((item) => {
-      totalCalories +=
-        parseFloat(item.nutritionalInfo.Calories) * item.quantity;
-      totalProtein += parseFloat(item.nutritionalInfo.Protein) * item.quantity;
-      totalFat += parseFloat(item.nutritionalInfo["Total Fat"]) * item.quantity;
-      let carbs = item.nutritionalInfo["Total Carbohydrate"];
+      totalCalories += parseFloat(item.calories) * item.quantity;
+      totalProtein += parseFloat(item.protein) * item.quantity;
+      totalFat += parseFloat(item.fat) * item.quantity;
+      let carbs = item.carbs;
       if (typeof carbs === "string" && carbs.includes("<")) {
         carbs = 0;
       } else {
@@ -81,9 +80,14 @@ const SavedMeals = () => {
     <>
       <Navbar />
       <div className="h-100 container-fluid px-5 mt-3">
-        <h2 className="fw-bold mb-3">Planned Meals</h2>
+        <h2
+          className="fw-bold mb-3"
+          style={{ display: "inline", marginRight: "15px" }}
+        >
+          Planned Meals
+        </h2>
         {loading ? (
-          <h1>Loading planned meals...</h1>
+          <span style={{ fontStyle: "italic" }}>Updating data...</span>
         ) : savedMeals.length === 0 ? (
           <div className="text-center">
             <img

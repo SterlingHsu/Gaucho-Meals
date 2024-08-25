@@ -63,7 +63,7 @@ const Signup = () => {
             "These credentials are already associated with an existing account."
           );
         } else if (res.data === "Successfully Signed Up User") {
-          navigate("/meal-planner");
+          navigate("/");
         }
       })
       .catch((e) => {

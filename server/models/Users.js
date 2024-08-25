@@ -29,13 +29,18 @@ const UserSchema = new mongoose.Schema({
     {
       diningHall: String,
       day: String,
-      // day is difficult to use in sorting, so we have a new mealDate 
+      // day is difficult to use in sorting, so we have a new mealDate
       mealDate: Date,
       mealTime: String,
       items: [
         {
           item: { type: mongoose.Schema.Types.ObjectId, ref: "Menu" },
+          name: String,
           quantity: Number,
+          calories: String,
+          protein: String,
+          fat: String,
+          carbs: String,
         },
       ],
     },

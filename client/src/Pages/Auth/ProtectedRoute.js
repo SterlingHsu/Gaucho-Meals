@@ -19,7 +19,7 @@ const ProtectedRoute = ({ children }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log(isAuthenticated);
+  
   return isAuthenticated ? children : <Navigate to="/forbidden-page" />;
 };
 
