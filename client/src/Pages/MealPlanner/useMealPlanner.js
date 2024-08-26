@@ -196,10 +196,12 @@ export const useMealPlanner = () => {
           _id: item._id.$oid || item._id.toString(),
           name: item.name,
           quantity: item.quantity,
-          calories: item.nutritionalInfo.Calories,
-          protein: item.nutritionalInfo.Protein,
-          fat: item.nutritionalInfo["Total Fat"],
-          carbs: item.nutritionalInfo["Total Carbohydrate"],
+          nutritionalInfo: {
+            Calories: item.nutritionalInfo.Calories,
+            Protein: item.nutritionalInfo.Protein,
+            "Total Fat": item.nutritionalInfo["Total Fat"],
+            "Total Carbohydrate": item.nutritionalInfo["Total Carbohydrate"],
+          }
         })),
       };
       // console.log("Sending meal data:", JSON.stringify(mealData, null, 2));
