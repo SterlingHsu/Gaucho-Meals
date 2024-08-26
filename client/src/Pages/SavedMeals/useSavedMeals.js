@@ -36,7 +36,6 @@ export const useSavedMeals = () => {
   }, [fetchSavedMeals]);
 
   const deleteSavedMeal = useCallback(async (mealId) => {
-    console.log(mealId);
     try {
       await axios.delete(`${apiUrl}/api/meals/delete-meal/${mealId}`, {
         withCredentials: true,

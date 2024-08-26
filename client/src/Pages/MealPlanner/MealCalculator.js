@@ -13,10 +13,10 @@ export const MealCalculator = ({
 
     Object.values(selectedItems).forEach((item) => {
       totalCalories +=
-        parseFloat(item.nutritionalInfo.Calories) * item.quantity;
-      totalProtein += parseFloat(item.nutritionalInfo.Protein) * item.quantity;
-      totalFat += parseFloat(item.nutritionalInfo["Total Fat"]) * item.quantity;
-      let carbs = item.nutritionalInfo["Total Carbohydrate"];
+        parseFloat(item.calories) * item.quantity;
+      totalProtein += parseFloat(item.protein) * item.quantity;
+      totalFat += parseFloat(item.fat) * item.quantity;
+      let carbs = item.carbs;
     if (typeof carbs === 'string' && carbs.includes('<')) {
       carbs = 0;
     } else {
