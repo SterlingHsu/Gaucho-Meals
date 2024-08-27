@@ -34,6 +34,8 @@ const MealPlanner = () => {
     removeItemFromCalculator,
     saveMeal,
     editMeal,
+    saveVote,
+    userVotes,
     handleDiningHallChange,
     handleDayChange,
     handleMealTimeChange,
@@ -95,6 +97,8 @@ const MealPlanner = () => {
               addItemToCalculator={addItemToCalculator}
               showIngredients={showIngredients}
               isMealSaved={isMealSaved}
+              saveVote={saveVote}
+              userVotes={userVotes}
             ></MenuItems>
           </div>
           <div

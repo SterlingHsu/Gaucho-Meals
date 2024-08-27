@@ -59,55 +59,66 @@ const Home = () => {
 
   return (
     <>
-      <Navbar />
-      {isAuthenticated ? (
-        <div className="container mt-4">
-          <div className="row">
-            {Object.entries(groupedPrimaryItems).map(
-              ([diningHall, meals], index) => (
-                <div key={index} className="col-md-4 mb-4">
-                  <div className="card h-100 shadow-sm">
-                    <div className="card-body">
-                      <h5 className="card-title">{diningHall}</h5>
-                      {Object.entries(meals).map(
-                        ([mealTime, items], mealIndex) => (
-                          <div key={mealIndex} className="mb-3">
-                            <h6 className="card-subtitle mb-2 text-muted text-capitalize">
-                              {mealTime}
-                            </h6>
-                            <div className="d-flex flex-wrap">
-                              {items.map((item, i) => (
-                                <span
-                                  key={i}
-                                  className="badge bg-light text-dark me-2 mb-2"
-                                >
-                                  {item}
-                                </span>
-                              ))}
-                            </div>
-                          </div>
-                        )
-                      )}
+      <div className="d-flex flex-column min-vh-100 overflow-hidden">
+        <Navbar />
+        <div className="flex-grow-1 d-flex align-items-center justify-content-center p-3 overflow-auto">
+          {isAuthenticated ? (
+            <div className="container mt-4">
+              <div className="row">
+                {Object.entries(groupedPrimaryItems).map(
+                  ([diningHall, meals], index) => (
+                    <div key={index} className="col-md-4 mb-4">
+                      <div className="card h-100 shadow-sm">
+                        <div className="card-body">
+                          <h5 className="card-title">{diningHall}</h5>
+                          {Object.entries(meals).map(
+                            ([mealTime, items], mealIndex) => (
+                              <div key={mealIndex} className="mb-3">
+                                <h6 className="card-subtitle mb-2 text-muted text-capitalize">
+                                  {mealTime}
+                                </h6>
+                                <div className="d-flex flex-wrap">
+                                  {items.map((item, i) => (
+                                    <span
+                                      key={i}
+                                      className="badge bg-light text-dark me-2 mb-2"
+                                    >
+                                      {item}
+                                    </span>
+                                  ))}
+                                </div>
+                              </div>
+                            )
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              )
-            )}
-          </div>
+                  )
+                )}
+              </div>
+            </div>
+          ) : (
+            <div className="text-center">
+              <img
+                src={mapacheHello}
+                alt="Mapache Hello"
+                className="img-fluid"
+                style={{
+                  maxWidth: "100%",
+                  height: "auto",
+                  maxHeight: "100%",
+                }}
+              ></img>
+              <p className="fs-1 fw-bold"> Welcome to Gaucho Meals 🧑‍🍳👋 </p>
+              <p>
+                {" "}
+                We're the home of California's healthiest nutrition nuts — and
+                we're glad you're here!
+              </p>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="flex-grow-1 d-flex align-items-center justify-content-center">
-          <div className="text-center">
-            <img src={mapacheHello} alt="" height="500" width="500"></img>
-            <p className="fs-1 fw-bold"> Welcome to Gaucho Meals 🧑‍🍳👋 </p>
-            <p>
-              {" "}
-              We're the home of California's healthiest nutrition nuts — and
-              we're glad you're here!
-            </p>
-          </div>
-        </div>
-      )}
+      </div>
     </>
   );
 };

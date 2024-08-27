@@ -25,6 +25,7 @@ export const useMealPlanner = () => {
     return saved === "true";
   });
   const [selectedIngredients, setSelectedIngredients] = useState(null);
+  const [userVotes, setUserVotes] = useState({});
   const [stickyTop, setStickyTop] = useState(0);
 
   useEffect(() => {
@@ -201,7 +202,7 @@ export const useMealPlanner = () => {
             Protein: item.nutritionalInfo.Protein,
             "Total Fat": item.nutritionalInfo["Total Fat"],
             "Total Carbohydrate": item.nutritionalInfo["Total Carbohydrate"],
-          }
+          },
         })),
       };
       // console.log("Sending meal data:", JSON.stringify(mealData, null, 2));
@@ -224,6 +225,108 @@ export const useMealPlanner = () => {
     setIsMealSaved,
   ]);
 
+  // Votes for dishes
+  const saveVote = useCallback(async (itemId, voteType) => {
+    try {
+      await axios.post(`${apiUrl}/api/meals/vote/${itemId}`, { voteType }, {
+        withCredentials: true,
+      });
+
+      setUserVotes(prevVotes => {
+        const currentVote = prevVotes[itemId];
+        let newVotes;
+
+        // Remove the vote if there was already one
+        if (currentVote === voteType) {
+          const { [itemId]: _, ...restVotes } = prevVotes;
+          newVotes = restVotes;
+        } else {
+          newVotes = {
+            ...prevVotes,
+            [itemId]: voteType
+          };
+        } 
+
+        saveVotesToStorage(newVotes, selectedDiningHall, selectedDay, selectedMealTime)
+
+        return newVotes;
+      });
+    } catch (error) {
+      console.error(
+        "Error saving vote:",
+        error.response?.data || error.message
+      );
+    }
+    // eslint-disable-next-line
+  }, []);
+
+  const STORAGE_KEY = "userVotesDictionary";
+  const EXPIRATION_DAYS = 7;
+
+  const getStorageKey = (diningHall, date, mealtime) => {
+    return `${diningHall}_${date}_${mealtime}`;
+  };
+
+  const saveVotesToStorage = (votes, diningHall, date, mealtime) => {
+    const storageKey = getStorageKey(diningHall, date, mealtime);
+    const currentDictionary = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "{}"
+    );
+
+    currentDictionary[storageKey] = {
+      votes,
+      expiration: Date.now() + EXPIRATION_DAYS * 24 * 60 * 60 * 1000,
+    };
+
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(currentDictionary));
+  };
+
+  const getVotesFromStorage = (diningHall, date, mealtime) => {
+    const storageKey = getStorageKey(diningHall, date, mealtime);
+    const currentDictionary = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "{}"
+    );
+    const storedData = currentDictionary[storageKey];
+
+    if (storedData && storedData.expiration > Date.now()) {
+      return storedData.votes;
+    }
+
+    // If expired or not found, remove the entry and return null
+    if (storedData) {
+      delete currentDictionary[storageKey];
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentDictionary));
+    }
+    return null;
+  };
+
+  const cleanExpiredVotes = () => {
+    const currentDictionary = JSON.parse(
+      localStorage.getItem(STORAGE_KEY) || "{}"
+    );
+    let hasChanges = false;
+
+    Object.keys(currentDictionary).forEach((key) => {
+      if (currentDictionary[key].expiration <= Date.now()) {
+        delete currentDictionary[key];
+        hasChanges = true;
+      }
+    });
+
+    if (hasChanges) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(currentDictionary));
+    }
+  };
+
+  useEffect(() => {
+    cleanExpiredVotes();
+
+    const storedVotes = getVotesFromStorage(selectedDiningHall, selectedDay, selectedMealTime);
+    if (storedVotes) {
+      setUserVotes(storedVotes);
+    }
+  }, [selectedDiningHall, selectedDay, selectedMealTime]);
+  
   const editMeal = useCallback(() => {
     setIsMealSaved(false);
   }, [setIsMealSaved]);
@@ -297,6 +400,8 @@ export const useMealPlanner = () => {
     removeItemFromCalculator,
     saveMeal,
     editMeal,
+    saveVote,
+    userVotes,
     handleDiningHallChange,
     handleDayChange,
     handleMealTimeChange,
