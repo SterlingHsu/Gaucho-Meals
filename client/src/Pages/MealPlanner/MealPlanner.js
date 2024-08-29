@@ -39,6 +39,8 @@ const MealPlanner = () => {
     handleDiningHallChange,
     handleDayChange,
     handleMealTimeChange,
+    dietaryPreferences,
+    handleDietaryPreferenceChange,
     showIngredients,
     initializeEditMeal,
   } = useMealPlanner();
@@ -91,6 +93,8 @@ const MealPlanner = () => {
               getDiningHalls={getDiningHalls}
               getDays={getDays}
               getMealTimes={getMealTimes}
+              dietaryPreferences={dietaryPreferences}
+              handleDietaryPreferenceChange={handleDietaryPreferenceChange}
             ></SelectionForm>
             <MenuItems
               getCategorizedItems={getCategorizedItems}
@@ -99,6 +103,7 @@ const MealPlanner = () => {
               isMealSaved={isMealSaved}
               saveVote={saveVote}
               userVotes={userVotes}
+              dietaryPreferences={dietaryPreferences}
             ></MenuItems>
           </div>
           <div

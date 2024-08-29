@@ -25,6 +25,7 @@ export const useMealPlanner = () => {
     return saved === "true";
   });
   const [selectedIngredients, setSelectedIngredients] = useState(null);
+  const [dietaryPreferences, setDietaryPreferences] = useState([]);
   const [userVotes, setUserVotes] = useState({});
   const [stickyTop, setStickyTop] = useState(0);
 
@@ -228,11 +229,15 @@ export const useMealPlanner = () => {
   // Votes for dishes
   const saveVote = useCallback(async (itemId, newVoteType, voteValue) => {
     try {
-      await axios.post(`${apiUrl}/api/meals/vote/${itemId}`, { voteValue }, {
-        withCredentials: true,
-      });
+      await axios.post(
+        `${apiUrl}/api/meals/vote/${itemId}`,
+        { voteValue },
+        {
+          withCredentials: true,
+        }
+      );
 
-      setUserVotes(prevVotes => {
+      setUserVotes((prevVotes) => {
         const currentVote = prevVotes[itemId];
         let newVotes;
 
@@ -243,11 +248,16 @@ export const useMealPlanner = () => {
         } else {
           newVotes = {
             ...prevVotes,
-            [itemId]: newVoteType
+            [itemId]: newVoteType,
           };
-        } 
+        }
 
-        saveVotesToStorage(newVotes, selectedDiningHall, selectedDay, selectedMealTime)
+        saveVotesToStorage(
+          newVotes,
+          selectedDiningHall,
+          selectedDay,
+          selectedMealTime
+        );
 
         return newVotes;
       });
@@ -321,12 +331,16 @@ export const useMealPlanner = () => {
   useEffect(() => {
     cleanExpiredVotes();
 
-    const storedVotes = getVotesFromStorage(selectedDiningHall, selectedDay, selectedMealTime);
+    const storedVotes = getVotesFromStorage(
+      selectedDiningHall,
+      selectedDay,
+      selectedMealTime
+    );
     if (storedVotes) {
       setUserVotes(storedVotes);
     }
   }, [selectedDiningHall, selectedDay, selectedMealTime]);
-  
+
   const editMeal = useCallback(() => {
     setIsMealSaved(false);
   }, [setIsMealSaved]);
@@ -367,6 +381,13 @@ export const useMealPlanner = () => {
     [setSelectedMealTime, setSelectedItems, setIsMealSaved]
   );
 
+  const handleDietaryPreferenceChange = (preference) => {
+    setDietaryPreferences((prev) => 
+      prev.includes(preference)
+        ? prev.filter((p) => p !== preference)
+        : [...prev, preference]
+    );
+  };
   const showIngredients = useCallback(
     (item) => {
       setSelectedIngredients(item);
@@ -405,6 +426,8 @@ export const useMealPlanner = () => {
     handleDiningHallChange,
     handleDayChange,
     handleMealTimeChange,
+    dietaryPreferences,
+    handleDietaryPreferenceChange,
     showIngredients,
     initializeEditMeal,
   };

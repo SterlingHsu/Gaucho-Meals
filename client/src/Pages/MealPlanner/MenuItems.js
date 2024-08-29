@@ -14,6 +14,7 @@ const MenuItems = ({
   isMealSaved,
   saveVote,
   userVotes,
+  dietaryPreferences
 }) => {
   const breakpointColumnsObj = {
     default: 3,
@@ -40,6 +41,7 @@ const MenuItems = ({
 
     let voteValue;
     if (storedVote) {
+      // Ex. If going from positive to negative, we need to decrease the rating by 2 to account for the existing positive vote
       if (storedVote === "positive") {
         storedVote === newVoteType ? (voteValue = -1) : (voteValue = -2);
       } else {
@@ -52,6 +54,15 @@ const MenuItems = ({
     saveVote(itemId, newVoteType, voteValue);
   };
 
+  const filterItemsByPreferences = (item) => {
+    if (dietaryPreferences.length === 0) return true;
+    
+    const noSeedOils = !dietaryPreferences.includes("No Seed Oils") || item.nutritionalInfo.noSeedOils;
+    const noPreservatives = !dietaryPreferences.includes("No Preservatives") || item.nutritionalInfo.noPreservatives;
+    
+    return noSeedOils && noPreservatives;
+  };
+
   return (
     <Masonry
       breakpointCols={breakpointColumnsObj}
@@ -61,7 +72,7 @@ const MenuItems = ({
       {getCategorizedItems.map((category, index) => (
         <div key={index} className="mb-4">
           <h4 className="mb-3">{category.category}</h4>
-          {category.items.map((item) => (
+          {category.items.filter(filterItemsByPreferences).map((item) => (
             <div key={item.name} className="card mb-3 shadow-sm">
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-2">

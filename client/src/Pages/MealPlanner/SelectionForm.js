@@ -5,6 +5,8 @@ export const SelectionForm = ({
   handleDiningHallChange,
   handleDayChange,
   handleMealTimeChange,
+  dietaryPreferences,
+  handleDietaryPreferenceChange,
   getDiningHalls,
   getDays,
   getMealTimes,
@@ -69,6 +71,28 @@ export const SelectionForm = ({
               </option>
             ))}
           </select>
+        </div>
+      </div>
+
+      <div className="row mt-4">
+        <div className="col-12">
+          <label className="form-label fw-bold">Dietary Preferences:</label>
+          <div className="d-flex flex-wrap">
+            {["No Seed Oils", "No Preservatives"].map((preference) => (
+              <div key={preference} className="form-check me-4">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id={preference.replace(/\s+/g, '-').toLowerCase()}
+                  checked={dietaryPreferences.includes(preference)}
+                  onChange={() => handleDietaryPreferenceChange(preference)}
+                />
+                <label className="form-check-label" htmlFor={preference.replace(/\s+/g, '-').toLowerCase()}>
+                  {preference}
+                </label>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </div>
