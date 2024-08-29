@@ -226,9 +226,9 @@ export const useMealPlanner = () => {
   ]);
 
   // Votes for dishes
-  const saveVote = useCallback(async (itemId, voteType) => {
+  const saveVote = useCallback(async (itemId, newVoteType, voteValue) => {
     try {
-      await axios.post(`${apiUrl}/api/meals/vote/${itemId}`, { voteType }, {
+      await axios.post(`${apiUrl}/api/meals/vote/${itemId}`, { voteValue }, {
         withCredentials: true,
       });
 
@@ -237,13 +237,13 @@ export const useMealPlanner = () => {
         let newVotes;
 
         // Remove the vote if there was already one
-        if (currentVote === voteType) {
+        if (currentVote === newVoteType) {
           const { [itemId]: _, ...restVotes } = prevVotes;
           newVotes = restVotes;
         } else {
           newVotes = {
             ...prevVotes,
-            [itemId]: voteType
+            [itemId]: newVoteType
           };
         } 
 

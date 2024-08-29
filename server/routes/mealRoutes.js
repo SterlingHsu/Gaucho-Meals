@@ -163,23 +163,13 @@ router.post("/vote/:id", validateToken, async (req, res) => {
     const decodedToken = verify(accessToken, secret);
     const userId = new ObjectId(decodedToken._id);
     const itemId = new ObjectId(req.params.id);
-    const { voteType } = req.body;
+    const { voteValue } = req.body;
 
-    if (!userId || !voteType) {
+    if (!userId || !voteValue) {
       return res
         .status(400)
-        .json({ message: "Missing userId or voteType in request body" });
+        .json({ message: "Missing userId or voteValue in request body" });
     }
-
-    if (voteType !== "positive" && voteType !== "negative") {
-      return res
-        .status(400)
-        .json({
-          message: 'Invalid voteType. Must be "positive" or "negative"',
-        });
-    }
-
-    const voteValue = voteType === "positive" ? 1 : -1;
 
     const result = await Meal.findOneAndUpdate(
       { "days.mealTimes.categories.items._id": itemId },

@@ -31,11 +31,25 @@ const MenuItems = ({
   };
 
   const toggleVote = (e, itemId) => {
+    const storedVote = userVotes[itemId];
+
     const clickedButton = e.currentTarget;
-    const voteType = clickedButton.classList.contains("vote-up")
+    const newVoteType = clickedButton.classList.contains("vote-up")
       ? "positive"
       : "negative";
-    saveVote(itemId, voteType);
+
+    let voteValue;
+    if (storedVote) {
+      if (storedVote === "positive") {
+        storedVote === newVoteType ? (voteValue = -1) : (voteValue = -2);
+      } else {
+        storedVote === newVoteType ? (voteValue = 1) : (voteValue = 2);
+      }
+    } else {
+      newVoteType === "positive" ? (voteValue = 1) : (voteValue = -1);
+    }
+
+    saveVote(itemId, newVoteType, voteValue);
   };
 
   return (
@@ -59,11 +73,11 @@ const MenuItems = ({
                       />
                     )}
                     {item.netRating < -20 && (
-                        <FontAwesomeIcon
-                          icon={faThumbsDown}
-                          className="text-primary me-2 tooltip"
-                        />
-                      )}
+                      <FontAwesomeIcon
+                        icon={faThumbsDown}
+                        className="text-primary me-2 tooltip"
+                      />
+                    )}
                     {item.name}
                   </h5>
                   <div className="d-flex align-items-center vote-container">
