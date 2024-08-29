@@ -52,14 +52,13 @@ const MenuItems = ({
               <div className="card-body">
                 <div className="d-flex justify-content-between align-items-center mb-2">
                   <h5 className="card-title mb-0">
-                    {item.rating.display && item.rating.netRatingIsPositive && (
+                    {item.netRating > 20 && (
                       <FontAwesomeIcon
                         icon={faHeart}
                         className="text-danger me-2"
                       />
                     )}
-                    {item.rating.display &&
-                      !item.rating.netRatingIsPositive && (
+                    {item.netRating < -20 && (
                         <FontAwesomeIcon
                           icon={faThumbsDown}
                           className="text-primary me-2 tooltip"

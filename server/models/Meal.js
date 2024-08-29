@@ -16,12 +16,7 @@ const mealSchema = new mongoose.Schema({
                   _id: mongoose.Schema.Types.ObjectId,
                   name: String,
                   nutritionalInfo: mongoose.Schema.Types.Mixed,
-                  rating: {
-                    positiveRaters: [ mongoose.Schema.Types.ObjectId ],
-                    negativeRaters: [ mongoose.Schema.Types.ObjectId ],
-                    display: Boolean,
-                    netRatingIsPositive: Boolean,
-                  },
+                  netRating: Number,
                 },
               ],
             },

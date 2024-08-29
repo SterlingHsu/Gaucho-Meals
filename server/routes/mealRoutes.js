@@ -158,14 +158,11 @@ router.get("/primary-items", async (req, res) => {
 });
 
 router.post("/vote/:id", validateToken, async (req, res) => {
-  // Placing a vote and taking back a vote are both handled at this endpoint
   try {
     const accessToken = req.cookies["access-token"];
     const decodedToken = verify(accessToken, secret);
     const userId = new ObjectId(decodedToken._id);
-
     const itemId = new ObjectId(req.params.id);
-
     const { voteType } = req.body;
 
     if (!userId || !voteType) {
@@ -175,56 +172,35 @@ router.post("/vote/:id", validateToken, async (req, res) => {
     }
 
     if (voteType !== "positive" && voteType !== "negative") {
-      return res.status(400).json({
-        message: 'Invalid voteType. Must be "positive" or "negative"',
-      });
+      return res
+        .status(400)
+        .json({
+          message: 'Invalid voteType. Must be "positive" or "negative"',
+        });
     }
 
-    const result = await Meal.findOne({
-      "days.mealTimes.categories.items._id": itemId,
-    });
+    const voteValue = voteType === "positive" ? 1 : -1;
+
+    const result = await Meal.findOneAndUpdate(
+      { "days.mealTimes.categories.items._id": itemId },
+      {
+        $inc: {
+          "days.$[].mealTimes.$[].categories.$[].items.$[item].netRating":
+            voteValue,
+        },
+      },
+      {
+        arrayFilters: [{ "item._id": itemId }],
+        new: true,
+      }
+    );
 
     if (!result) {
-      return res.status(404).json({ message: "Meal item not found" });
+      console.log("Menu item not found");
+      return null;
     }
 
-    const updatedItem = result.days
-      .flatMap((day) => day.mealTimes)
-      .flatMap((mealTime) => mealTime.categories)
-      .flatMap((category) => category.items)
-      .find((item) => item._id.equals(itemId));
-
-    if (updatedItem) {
-      const ratingArray =
-        voteType === "positive" ? "positiveRaters" : "negativeRaters";
-      const oppositeArray =
-        voteType === "positive" ? "negativeRaters" : "positiveRaters";
-
-      // Remove user from the opposite array if present
-      const oppositeIndex = updatedItem.rating[oppositeArray].indexOf(userId);
-      if (oppositeIndex !== -1) {
-        updatedItem.rating[oppositeArray].splice(oppositeIndex, 1);
-      }
-
-      const ratingArrayIndex = updatedItem.rating[ratingArray].indexOf(userId);
-      if (ratingArrayIndex !== -1) {
-        updatedItem.rating[ratingArray].splice(ratingArrayIndex, 1);
-      } else {
-        updatedItem.rating[ratingArray].push(userId);
-      }
-
-      const positiveCount = updatedItem.rating.positiveRaters.length;
-      const negativeCount = updatedItem.rating.negativeRaters.length;
-      const minimumNetVotesToDisplay = 20;
-
-      updatedItem.rating.display =
-        Math.abs(positiveCount - negativeCount) > minimumNetVotesToDisplay;
-      updatedItem.rating.netRatingIsPositive = positiveCount > negativeCount;
-
-      await result.save();
-    }
-
-    res.json({ message: "Vote recorded successfully", item: updatedItem });
+    res.json({ message: "Vote recorded successfully" });
   } catch (error) {
     console.error("Error in /vote/:id:", error);
     res.status(500).json({ message: "Internal server error" });
