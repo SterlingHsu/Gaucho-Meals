@@ -138,7 +138,7 @@ router.get("/primary-items", async (req, res) => {
 
     const primaryItems = await Meal.aggregate([
       { $unwind: "$days" },
-      { $match: { "days.day": currentDate } },
+      { $match: { $or: [{ "days.day": currentDate }, { "days.day": "" }] } },
       { $unwind: "$days.mealTimes" },
       {
         $project: {

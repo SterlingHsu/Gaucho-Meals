@@ -56,11 +56,17 @@ const MenuItems = ({
 
   const filterItemsByPreferences = (item) => {
     if (dietaryPreferences.length === 0) return true;
-    
-    const noSeedOils = !dietaryPreferences.includes("No Seed Oils") || item.nutritionalInfo.noSeedOils;
-    const noPreservatives = !dietaryPreferences.includes("No Preservatives") || item.nutritionalInfo.noPreservatives;
-    
-    return noSeedOils && noPreservatives;
+
+    console.log(item)
+
+    // Logical equivalent of !(dietaryPreferences includes preference && item contradicts preference)
+    const noSeedOils = !dietaryPreferences.includes("No Seed Oils") || !item.nutritionalInfo.hasSeedOils;
+    const noPreservatives = !dietaryPreferences.includes("No Preservatives") || !item.nutritionalInfo.hasPreservatives;
+    const noGums = !dietaryPreferences.includes("No Gums") || !item.nutritionalInfo.hasGums;
+    const isVegetarian = !dietaryPreferences.includes("Vegetarian") || item.nutritionalInfo.isVegetarian;
+    const isVegan = !dietaryPreferences.includes("Vegan") || item.nutritionalInfo.isVegan;
+
+    return noSeedOils && noPreservatives && noGums && isVegetarian && isVegan;
   };
 
   return (

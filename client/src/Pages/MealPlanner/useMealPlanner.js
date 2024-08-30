@@ -82,18 +82,27 @@ export const useMealPlanner = () => {
 
   const getCategorizedItems = useMemo(() => {
     if (!selectedDiningHall) return [];
+
+    const hallMeals = meals.find(
+      (meal) => meal.diningHall === selectedDiningHall
+    );
+    if (!hallMeals) return [];
+
     if (selectedDiningHall === "Take Out at Ortega Commons") {
-      return meals
-        .filter((meal) => meal.diningHall === selectedDiningHall)
-        .flatMap((meal) => meal.categories);
+      return hallMeals.days[0].mealTimes[0].categories;
     } else if (selectedDay && selectedMealTime) {
-      return meals
-        .filter((meal) => meal.diningHall === selectedDiningHall)
-        .flatMap((meal) => meal.days)
-        .filter((day) => day.day === selectedDay)
-        .flatMap((day) => day.mealTimes)
-        .filter((mealTime) => mealTime.mealTime === selectedMealTime)
-        .flatMap((mealTime) => mealTime.categories);
+      const selectedDayMeals = hallMeals.days.find(
+        (day) => day.day === selectedDay
+      );
+      if (!selectedDayMeals) return [];
+
+      const selectedMealTimeCategories = selectedDayMeals.mealTimes.find(
+        (mealTime) => mealTime.mealTime === selectedMealTime
+      );
+
+      return selectedMealTimeCategories
+        ? selectedMealTimeCategories.categories
+        : [];
     }
     return [];
   }, [meals, selectedDiningHall, selectedDay, selectedMealTime]);
