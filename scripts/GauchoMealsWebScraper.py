@@ -46,13 +46,24 @@ def getMenuItemInfo(driver):
         "Total Carbohydrate": 0,
         "Dietary Fiber": 0,
         "Total Sugars": 0,
-        "Added Sugars": -1,
+        "Added Sugars": 0,
         "Protein": 0,
         "Ingredients": "None",
+        "isVegetarian": False,
+        "isVegan": False,
+        "hasSeedOils": False,
+        "hasGums": False,
+        "hasPreservatives": False
     }
     
     itemName = nutrient_table.find('td', class_="cbo_nn_LabelHeader").get_text().strip()
     nutritional_info["Item"] = itemName
+
+    if "(v)" in itemName:
+        nutritional_info["isVegetarian"] = True
+    elif "(vgn)" in itemName:
+        nutritional_info["isVegan"] = True
+
     calories_span = nutrient_table.find('span', class_="font-16", string="Calories")
     if calories_span:
         calorie_count = calories_span.find_parent().find_next_sibling().get_text().strip()
@@ -90,7 +101,28 @@ def getMenuItemInfo(driver):
     if ingredientList:
         ingredients = ingredientList.get_text().replace("\xa0", " ").strip()
         nutritional_info["Ingredients"] = ingredients
+        ingredient_flags = processIngredients(ingredients)
+        for category in ingredient_flags:
+            nutritional_info[category] = ingredient_flags[category]
     return nutritional_info
+
+def processIngredients(ingredients):
+    categories = {
+        "hasSeedOils" : ["canola", "sunflower", "palm", "cottonseed", "soybean", "peanut oil", "margarine", "vegetable shortening", "vegetable oil", "crisco", "corn oil"],
+        "hasPreservatives" : ["potassium sorbate", "calcium disodium", "potassium metabisulfite"],
+        "hasGums": ["gum"]
+    }    
+
+    ingredients = ingredients.lower()
+
+    results = {category: False for category in categories}
+    for category, items in categories.items():
+        for item in items:
+            if item in ingredients:
+                results[category] = True
+                break
+
+    return results
 
 def getMenuItemsByCategory(driver):
     wait = WebDriverWait(driver, 10)
@@ -237,6 +269,7 @@ def format_dish_with_emoji(dish_name):
         'enchilada': '🌯',
         'rib': '🍖',
         'fajita': '🌮',
+        'pad thai': '🍜',
         'noodle': '🍜',
         'sushi': '🍣',
         'soup': '🍲',
@@ -273,12 +306,13 @@ def format_dish_with_emoji(dish_name):
         'roll': '🥐',
         'cookie': '🍪',
         'cake': '🍰',
+        'brownie': '🟫',
         'sausage': '🌭',
+        'broccoli': '🥦',
         'roast': '🍖',
         'rice': '🍚',
         'tofu': '◻️',
         'potato': '🥔',
-        'broccoli': '🥦'
     }
     
     for keyword, emoji in keyword_emoji_map.items():
@@ -301,7 +335,16 @@ def setPrimaryItems(menu):
                                     primary_items.append(format_dish_with_emoji(items[1]['Item']))  # Add the second item
 
                     meals[meal]['Primary Items'] = primary_items
+        else:
+            primary_items = []
+            excluded_categories = ["Beverages", "Condiments"]
+            for category, items in dining_common_data.items():
+                if category not in excluded_categories:
+                    for item in items:
+                        primary_items.append(format_dish_with_emoji(item['Item']))
 
+            menu["Take Out at Ortega Commons"]['Primary Items'] = primary_items          
+    
     return menu
 
 def printMenu(menu):
@@ -330,20 +373,29 @@ def save_to_db(data):
 
     for hall, days in data.items():
         if hall == "Take Out at Ortega Commons":
-            hall_doc = {"diningHall": hall, "categories": []}
+            hall_doc = {"diningHall": hall, "days": []}
+            day_doc = {"day": "", "mealTimes": []}
+            meal_time_doc = {"mealTime": "", "categories": []}
             
             for category, items in days.items():
                 category_doc = {"category": category, "items": []}
                 
-                for item in items:
-                    item_doc = {
-                        "_id": ObjectId(),
-                        "name": item["Item"],
-                        "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
-                    }
-                    category_doc["items"].append(item_doc)
-                
-                hall_doc["categories"].append(category_doc)
+                if category == "Primary Items": 
+                    meal_time_doc["primaryItems"] = items
+                else:
+                    for item in items:
+                        item_doc = {
+                            "_id": ObjectId(),
+                            "name": item["Item"],
+                            "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
+                        }
+                        category_doc["items"].append(item_doc)
+
+                meal_time_doc["categories"].append(category_doc)
+
+            day_doc["mealTimes"].append(meal_time_doc)
+
+            hall_doc["days"].append(day_doc)
             
             meals_collection.insert_one(hall_doc)
             
@@ -387,7 +439,7 @@ def daily_update_db(data):
         if dining_hall == "Take Out at Ortega Commons":
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
-                {"$set": {"categories": []}}
+                {"$set": {"diningHall": []}}
             )
             
             if result.modified_count > 0:
@@ -398,8 +450,8 @@ def daily_update_db(data):
             formatted_day = format_new_ortega_day(new_day_data)
             
             meals_collection.update_one(
-                {"_id": doc["_id"]},
-                {"$set": {"categories": formatted_day}}
+                {"_id": doc[0][0]["_id"]},
+                {"$set": {"diningHall": formatted_day}}
             )
             
         elif doc and "days" in doc and len(doc["days"]) > 0:
@@ -456,7 +508,10 @@ def format_new_day(day_data):
     return formatted_day
 
 def format_new_ortega_day(day_data):
-    categories = []
+    hall_doc = {"diningHall": "Take Out at Ortega Commons", "days": []}
+    day_doc = {"day": "", "mealTimes": []}
+    meal_time_doc = {"mealTime": "", "categories": []}
+
     for category, items in day_data.items():
         category_doc = {"category": category, "items": []}
 
@@ -467,11 +522,21 @@ def format_new_ortega_day(day_data):
                 "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
             }
             category_doc["items"].append(item_doc)
-        categories.append(category_doc)
 
-    return categories
+    meal_time_doc.append(category_doc)
+    day_doc.append(meal_time_doc)
+    hall_doc.append(day_doc)
+
+    return hall_doc
+
+def scrape(get_most_recent_only=False):
+    menu = getMenu(get_most_recent_only)
+
+    if (get_most_recent_only):
+        daily_update_db(menu)
+    else:
+        save_to_db(menu)
 
 if __name__ == "__main__":
-    menu = getMenu(get_most_recent_only=True)
-    daily_update_db(menu)
+    scrape(get_most_recent_only=True)
 
