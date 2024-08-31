@@ -1,5 +1,5 @@
 import Navbar from "../../Components/Navbar";
-import React, { useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useMealPlanner } from "./useMealPlanner";
 import { SelectionForm } from "./SelectionForm";
 import { MealCalculator } from "./MealCalculator";
@@ -44,9 +44,10 @@ const MealPlanner = () => {
     showIngredients,
     initializeEditMeal,
   } = useMealPlanner();
-
+  
+  const [showCalculator, setShowCalculator] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const sidebarRef = useRef(null);
-
   const location = useLocation();
 
   useEffect(() => {
@@ -70,6 +71,22 @@ const MealPlanner = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [setStickyTop]);
+
+
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIfMobile);
+    };
+  }, []);
+
+  const toggleCalculator = () => setShowCalculator(!showCalculator);
 
   return (
     <div>
@@ -106,27 +123,75 @@ const MealPlanner = () => {
               dietaryPreferences={dietaryPreferences}
             ></MenuItems>
           </div>
-          <div
-            className="col-md-3"
-            ref={sidebarRef}
-            style={{
-              position: "sticky",
-              top: `${stickyTop}px`,
-              maxHeight: "calc(100vh - 120px)",
-              overflowY: "auto",
-              transition: "top 0.1s ease",
-            }}
-          >
-            <h2>Meal Calculator</h2>
-            <MealCalculator
-              selectedItems={selectedItems}
-              removeItemFromCalculator={removeItemFromCalculator}
-              isMealSaved={isMealSaved}
-              saveMeal={saveMeal}
-              editMeal={editMeal}
-            ></MealCalculator>
-          </div>
+          {!isMobile && (
+            <div
+              className="col-md-3"
+              ref={sidebarRef}
+              style={{
+                position: "sticky",
+                top: `${stickyTop}px`,
+                maxHeight: "calc(100vh - 120px)",
+                overflowY: "auto",
+                transition: "top 0.1s ease",
+              }}
+            >
+              <h2>Meal Calculator</h2>
+              <MealCalculator
+                selectedItems={selectedItems}
+                removeItemFromCalculator={removeItemFromCalculator}
+                isMealSaved={isMealSaved}
+                saveMeal={saveMeal}
+                editMeal={editMeal}
+              ></MealCalculator>
+            </div>
+          )}
         </div>
+      </div>
+      <div>
+        {isMobile && (
+          <>
+            <button
+              onClick={toggleCalculator}
+              className="btn btn-dark position-fixed bottom-0 end-0 m-3"
+              style={{ zIndex: 1030 }}
+            >
+              Meal Calculator
+            </button>
+            <div
+              className={`offcanvas offcanvas-bottom ${
+                showCalculator ? "show" : ""
+              }`}
+              tabIndex="-1"
+              id="mealCalculator"
+              style={{ height: '90vh', transition: 'transform .3s ease-in-out' }}
+            >
+              <div className="offcanvas-header">
+                <h5 className="offcanvas-title">Meal Calculator</h5>
+                <button
+                  type="button"
+                  className="btn-close text-reset"
+                  onClick={toggleCalculator}
+                  aria-label="Close"
+                ></button>
+              </div>
+              <div className="offcanvas-body">
+                <MealCalculator
+                  selectedItems={selectedItems}
+                  removeItemFromCalculator={removeItemFromCalculator}
+                  isMealSaved={isMealSaved}
+                  saveMeal={saveMeal}
+                  editMeal={editMeal}
+                ></MealCalculator>
+              </div>
+            </div>
+            {showCalculator && (
+              <div
+                className="offcanvas-backdrop fade show"
+                onClick={toggleCalculator}
+              ></div>
+            )}
+          </>
+        )}
       </div>
       <Modal
         isOpen={!!selectedIngredients}
