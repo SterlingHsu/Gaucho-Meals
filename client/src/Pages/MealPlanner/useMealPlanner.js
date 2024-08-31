@@ -151,27 +151,16 @@ export const useMealPlanner = () => {
   }, [meals, selectedDiningHall, selectedDay]);
 
   const addItemToCalculator = useCallback(
-    (itemName) => {
+    (item) => {
       setSelectedItems((prevItems) => {
         const newItems = { ...prevItems };
-        if (newItems[itemName]) {
-          newItems[itemName] = {
-            ...newItems[itemName],
-            quantity: newItems[itemName].quantity + 1,
+        if (newItems[item.name]) {
+          newItems[item.name] = {
+            ...newItems[item.name],
+            quantity: newItems[item.name].quantity + 1,
           };
         } else {
-          const item = meals
-            .flatMap((meal) =>
-              meal.diningHall === "Take Out at Ortega Commons"
-                ? meal.categories.flatMap((category) => category.items)
-                : meal.days.flatMap((day) =>
-                    day.mealTimes.flatMap((mealTime) =>
-                      mealTime.categories.flatMap((category) => category.items)
-                    )
-                  )
-            )
-            .find((i) => i.name === itemName);
-          newItems[itemName] = { ...item, quantity: 1 };
+          newItems[item.name] = { ...item, quantity: 1 };
         }
         return newItems;
       });
@@ -397,6 +386,7 @@ export const useMealPlanner = () => {
         : [...prev, preference]
     );
   };
+
   const showIngredients = useCallback(
     (item) => {
       setSelectedIngredients(item);

@@ -134,7 +134,7 @@ const MenuItems = ({
                     </button>
                     <button
                       className="btn btn-primary btn-sm"
-                      onClick={() => addItemToCalculator(item.name)}
+                      onClick={() => addItemToCalculator(item)}
                     >
                       Add
                     </button>
