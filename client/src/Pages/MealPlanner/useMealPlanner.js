@@ -117,18 +117,16 @@ export const useMealPlanner = () => {
       return Array.from(
         new Set(
           meals
-            .filter((meal) => meal.diningHall === "De La Guerra Dining Commons")
-            .flatMap((meal) => meal.days)
-            .map((day) => day.day)
+            .find((meal) => meal.diningHall === "De La Guerra Dining Commons")
+            .days.map((day) => day.day)
         )
       );
     else
       return Array.from(
         new Set(
           meals
-            .filter((meal) => meal.diningHall === selectedDiningHall)
-            .flatMap((meal) => meal.days)
-            .map((day) => day.day)
+            .find((meal) => meal.diningHall === selectedDiningHall)
+            .days.map((day) => day.day)
         )
       );
   }, [meals, selectedDiningHall]);
@@ -141,11 +139,9 @@ export const useMealPlanner = () => {
       return Array.from(
         new Set(
           meals
-            .filter((meal) => meal.diningHall === selectedDiningHall)
-            .flatMap((meal) => meal.days)
-            .filter((day) => day.day === selectedDay)
-            .flatMap((day) => day.mealTimes)
-            .map((mealTime) => mealTime.mealTime)
+            .find((meal) => meal.diningHall === selectedDiningHall)
+            .days.find((day) => day.day === selectedDay)
+            .mealTimes.map((mealTime) => mealTime.mealTime)
         )
       );
   }, [meals, selectedDiningHall, selectedDay]);
@@ -380,7 +376,7 @@ export const useMealPlanner = () => {
   );
 
   const handleDietaryPreferenceChange = (preference) => {
-    setDietaryPreferences((prev) => 
+    setDietaryPreferences((prev) =>
       prev.includes(preference)
         ? prev.filter((p) => p !== preference)
         : [...prev, preference]
