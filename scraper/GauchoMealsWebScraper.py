@@ -267,6 +267,7 @@ def format_dish_with_emoji(dish_name):
         'wrap': '🌯',
         'tostada': '🌮',
         'enchilada': '🌯',
+        'fries': '🍟',
         'rib': '🍖',
         'fajita': '🌮',
         'pad thai': '🍜',

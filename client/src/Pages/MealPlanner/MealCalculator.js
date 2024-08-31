@@ -17,12 +17,12 @@ export const MealCalculator = ({
       totalProtein += parseFloat(item.nutritionalInfo.Protein) * item.quantity;
       totalFat += parseFloat(item.nutritionalInfo["Total Fat"]) * item.quantity;
       let carbs = item.nutritionalInfo["Total Carbohydrate"];
-    if (typeof carbs === 'string' && carbs.includes('<')) {
-      carbs = 0;
-    } else {
-      carbs = parseFloat(carbs);
-    }
-    totalCarbs += carbs * item.quantity;
+      if (typeof carbs === "string" && carbs.includes("<")) {
+        carbs = 0;
+      } else {
+        carbs = parseFloat(carbs);
+      }
+      totalCarbs += carbs * item.quantity;
     });
 
     return { totalCalories, totalProtein, totalFat, totalCarbs };
@@ -32,54 +32,72 @@ export const MealCalculator = ({
     calculateNutritionalInfo();
 
   return (
-    <div id="calculator" className="border p-3 shadow-sm rounded">
-      <h4>Selected Items</h4>
-      <ul id="selected-items" className="list-group mb-3">
-        {Object.values(selectedItems).map((item) => (
-          <li
-            key={item.name}
-            className="list-group-item d-flex justify-content-between align-items-center"
-          >
-            <span>
-              {item.name} <strong> x {item.quantity}</strong>
-            </span>
-            {!isMealSaved && (
-              <button
-                className="btn btn-danger btn-sm"
-                onClick={() => removeItemFromCalculator(item.name)}
-              >
-                Remove
-              </button>
-            )}
+    <div className="card shadow-sm">
+      <div className="card-body">
+        <h5 className="card-title mb-3">Selected Items</h5>
+        <ul className="list-group mb-4">
+          {Object.values(selectedItems).map((item) => (
+            <li
+              key={item.name}
+              className="list-group-item d-flex justify-content-between align-items-center"
+            >
+              <span>
+                {item.name}{" "}
+                <span className="badge bg-secondary rounded-pill">
+                  x {item.quantity}
+                </span>
+              </span>
+              {!isMealSaved && (
+                <button
+                  className="btn btn-outline-danger btn-sm"
+                  onClick={() => removeItemFromCalculator(item.name)}
+                >
+                  Remove
+                </button>
+              )}
+            </li>
+          ))}
+        </ul>
+
+        <h5 className="card-title mb-3">Nutritional Info</h5>
+        <ul className="list-group list-group-flush mb-4">
+          <li className="list-group-item d-flex justify-content-between">
+            <span>Calories:</span>
+            <strong>{totalCalories.toFixed(2)}</strong>
           </li>
-        ))}
-      </ul>
-      <h4>Nutritional Info</h4>
-      <p>
-        Calories: <span id="total-calories">{totalCalories}</span>
-      </p>
-      <p>
-        Protein: <span id="total-protein">{totalProtein}g</span>
-      </p>
-      <p>
-        Fat: <span id="total-fat">{totalFat}g</span>
-      </p>
-      <p>
-        Carbs: <span id="total-carbs">{totalCarbs}g</span>
-      </p>
-      <div className="d-flex justify-content-end">
-        {!isMealSaved ? (
-          <button className="btn btn-success" onClick={() => saveMeal()}>
-            Save Meal
-          </button>
-        ) : (
-          <div>
-            <button className="btn btn-primary me-2" onClick={() => editMeal()}>
-              Edit Meal
+          <li className="list-group-item d-flex justify-content-between">
+            <span>Protein:</span>
+            <strong>{totalProtein.toFixed(2)}g</strong>
+          </li>
+          <li className="list-group-item d-flex justify-content-between">
+            <span>Fat:</span>
+            <strong>{totalFat.toFixed(2)}g</strong>
+          </li>
+          <li className="list-group-item d-flex justify-content-between">
+            <span>Carbs:</span>
+            <strong>{totalCarbs.toFixed(2)}g</strong>
+          </li>
+        </ul>
+
+        <div className="d-flex justify-content-end">
+          {!isMealSaved ? (
+            <button className="btn btn-success" onClick={() => saveMeal()}>
+              Save Meal
             </button>
-            <button className="btn btn-success"> Saved ✅</button>
-          </div>
-        )}
+          ) : (
+            <>
+              <button
+                className="btn btn-primary me-2"
+                onClick={() => editMeal()}
+              >
+                Edit Meal
+              </button>
+              <button className="btn btn-success" disabled>
+                Saved ✅ <i className="bi bi-check-circle-fill"></i>
+              </button>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
