@@ -90,7 +90,7 @@ const MenuItems = ({
                     {item.netRating < -20 && (
                       <FontAwesomeIcon
                         icon={faThumbsDown}
-                        className="text-primary me-2 tooltip"
+                        className="text-primary me-2"
                       />
                     )}
                     {item.name}
