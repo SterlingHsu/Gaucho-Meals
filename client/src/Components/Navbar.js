@@ -27,6 +27,10 @@ const MainNavbar = () => {
     // eslint-disable-next-line
   }, []);
 
+  useEffect(() => {
+    console.log(isAuthenticated);
+  }, [isAuthenticated]);
+
   const checkAuthStatus = async () => {
     console.log("Call check in Nav checkAuthStatus");
     try {
@@ -36,6 +40,7 @@ const MainNavbar = () => {
       });
       console.log("After check in Nav checkAuthStatus", response);
       if (response.ok) {
+        console.log("Nav check is okay");
         const data = await response.json();
         setIsAuthenticated(data.authenticated);
         localStorage.setItem(
@@ -43,10 +48,12 @@ const MainNavbar = () => {
           JSON.stringify(data.authenticated)
         );
       } else {
+        console.log("Nav check is not okay");
         setIsAuthenticated(false);
         localStorage.setItem("isAuthenticated", "false");
       }
     } catch (error) {
+      console.log("Nav check is error");
       console.error("Auth check error:", error);
       setIsAuthenticated(false);
       localStorage.setItem("isAuthenticated", "false");
