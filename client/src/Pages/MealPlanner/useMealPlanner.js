@@ -89,7 +89,7 @@ export const useMealPlanner = () => {
     if (!hallMeals) return [];
 
     if (selectedDiningHall === "Take Out at Ortega Commons") {
-      return hallMeals.days[0].mealTimes[0].categories;
+      return hallMeals.days[0].mealTimes[0].categories.filter((category) => category.category !== "Primary Items");
     } else if (selectedDay && selectedMealTime) {
       const selectedDayMeals = hallMeals.days.find(
         (day) => day.day === selectedDay
@@ -101,7 +101,7 @@ export const useMealPlanner = () => {
       );
 
       return selectedMealTimeCategories
-        ? selectedMealTimeCategories.categories
+        ? selectedMealTimeCategories.categories.filter((category) => category.category !== "Primary Items")
         : [];
     }
     return [];
@@ -161,7 +161,7 @@ export const useMealPlanner = () => {
         return newItems;
       });
     },
-    [meals, setSelectedItems]
+    [setSelectedItems]
   );
 
   const removeItemFromCalculator = useCallback(

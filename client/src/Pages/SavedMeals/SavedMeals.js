@@ -49,7 +49,8 @@ const SavedMeals = () => {
       totalCarbs = 0;
 
     items.forEach((item) => {
-      totalCalories += parseFloat(item.nutritionalInfo.Calories) * item.quantity;
+      totalCalories +=
+        parseFloat(item.nutritionalInfo.Calories) * item.quantity;
       totalProtein += parseFloat(item.nutritionalInfo.Protein) * item.quantity;
       totalFat += parseFloat(item.nutritionalInfo["Total Fat"]) * item.quantity;
       let carbs = item.nutritionalInfo["Total Carbohydrate"];
@@ -79,7 +80,7 @@ const SavedMeals = () => {
   return (
     <>
       <Navbar />
-      <div className="h-100 container-fluid px-5 mt-3">
+      <div className="container-fluid px-5 mt-3">
         <h2
           className="fw-bold mb-3"
           style={{ display: "inline", marginRight: "15px" }}
@@ -94,7 +95,7 @@ const SavedMeals = () => {
               src={mapachesad}
               alt="Sad Mapache"
               className="img-fluid"
-              style={{ maxWidth: "500px" }}
+              style={{ maxWidth: "100%", height: "auto", maxHeight: "100%" }}
             />
             <h1>No meals planned yet!</h1>
           </div>

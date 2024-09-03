@@ -63,7 +63,7 @@ export const MealCalculator = ({
         <ul className="list-group list-group-flush mb-4">
           <li className="list-group-item d-flex justify-content-between">
             <span>Calories:</span>
-            <strong>{totalCalories.toFixed(2)}</strong>
+            <strong>{totalCalories.toFixed(0)}</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
             <span>Protein:</span>

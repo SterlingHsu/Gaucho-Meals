@@ -30,11 +30,11 @@ const Home = () => {
 
   const groupedPrimaryItems = useMemo(() => {
     const grouped = {};
-    primaryItems.forEach((item) => {
-      if (!grouped[item.diningHall]) {
-        grouped[item.diningHall] = {};
+    primaryItems.forEach((hall) => {
+      if (!grouped[hall.diningHall]) {
+        grouped[hall.diningHall] = {};
       }
-      grouped[item.diningHall][item.mealTime] = item.primaryItems;
+      grouped[hall.diningHall][hall.mealTime] = hall.primaryItems;
     });
     return grouped;
   }, [primaryItems]);

@@ -374,7 +374,7 @@ def save_to_db(data):
 
     for hall, days in data.items():
         if hall == "Take Out at Ortega Commons":
-            hall_doc = {"diningHall": hall, "days": []}
+            hall_doc = {"diningHall": "Take Out at Ortega Commons", "days": []}
             day_doc = {"day": "", "mealTimes": []}
             meal_time_doc = {"mealTime": "", "categories": []}
             
