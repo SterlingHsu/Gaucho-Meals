@@ -38,7 +38,8 @@ const MainNavbar = () => {
         method: "GET",
         credentials: "include",
       });
-      console.log("After check in Nav checkAuthStatus", response);
+      console.log("After check in Nav checkAuthStatus");
+      console.log(JSON.stringify(response));
       if (response.ok) {
         console.log("Nav check is okay");
         const data = await response.json();
