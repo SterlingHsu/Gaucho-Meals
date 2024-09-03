@@ -11,6 +11,7 @@ const Login = () => {
   const [password, setPassword] = useState("");
 
   const submit = (e) => {
+    console.log("Submit login");
     e.preventDefault();
     axios
       .post(
@@ -23,6 +24,7 @@ const Login = () => {
       )
       .then((res) => {
         if (res.data === "Success") {
+          console.log("Login success");
           navigate("/");
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");

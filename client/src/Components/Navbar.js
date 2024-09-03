@@ -28,11 +28,13 @@ const MainNavbar = () => {
   }, []);
 
   const checkAuthStatus = async () => {
+    console.log("Call check in Nav checkAuthStatus");
     try {
       const response = await fetch(`${apiUrl}/api/auth/check`, {
         method: "GET",
         credentials: "include",
       });
+      console.log("After check in Nav checkAuthStatus", response);
       if (response.ok) {
         const data = await response.json();
         setIsAuthenticated(data.authenticated);
@@ -92,7 +94,9 @@ const MainNavbar = () => {
           >
             <img src={mapachehat} alt="" height="28px" className="me-2" />
             <span className="d-none d-md-inline">Gaucho Meals</span>
-            <span className="d-inline d-md-none" style={{ fontSize: '.95rem' }}>Gaucho Meals</span>
+            <span className="d-inline d-md-none" style={{ fontSize: ".95rem" }}>
+              Gaucho Meals
+            </span>
           </Navbar.Brand>
           <Nav className="ms-auto">
             {isAuthenticated ? (

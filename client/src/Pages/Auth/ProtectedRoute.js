@@ -11,6 +11,7 @@ const ProtectedRoute = ({ children }) => {
       .get(`${process.env.REACT_APP_API_URL}/api/auth/check`, {
         withCredentials: true,
       })
+      .then(console.log("Check called in ProtectedRoute"))
       .then(() => setIsAuthenticated(true))
       .catch(() => setIsAuthenticated(false))
       .finally(() => setIsLoading(false));
