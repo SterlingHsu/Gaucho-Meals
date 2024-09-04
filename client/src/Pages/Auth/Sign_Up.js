@@ -73,9 +73,9 @@ const Signup = () => {
   };
 
   return (
-    <div className="d-flex flex-column vh-100">
+    <div className="d-flex flex-column min-vh-100 overflow-hidden">
       <Navbar />
-      <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
+      <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center overflow-auto">
         <form className="border border-secondary-subtle p-4 rounded shadow-sm">
           <h3 align="center">Sign Up</h3>
           {error && (
