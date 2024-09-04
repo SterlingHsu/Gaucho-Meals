@@ -40,7 +40,7 @@ const MainNavbar = () => {
       });
       console.log("After check in Nav checkAuthStatus");
       console.log(JSON.stringify(response));
-      console.log(JSON.stringify(response.data.authenticated));
+      // console.log(JSON.stringify(response.data.authenticated));
       if (response.ok) {
         console.log("Nav check is okay");
         const data = await response.json();
