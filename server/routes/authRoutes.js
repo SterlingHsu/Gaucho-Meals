@@ -5,7 +5,13 @@ const { createTokens, validateToken } = require("../JWT");
 
 const router = express.Router();
 
+router.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: err.message });
+});
+
 router.get("/check", validateToken, (req, res) => {
+  console.log(JSON.stringify(req.body))
   res.status(200).json({ authenticated: true });
 });
 
