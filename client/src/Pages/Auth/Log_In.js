@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../Components/Navbar";
+import Cookies from "js-cookies"
 
 const Login = () => {
   const navigate = useNavigate();
@@ -25,6 +26,12 @@ const Login = () => {
       .then((res) => {
         if (res.data === "Success") {
           console.log("Login success");
+          Cookies.set("access-token", res.data.token, {
+            expires: 7,
+            secure: true,
+            sameSite: "none",
+            path: "/",
+          });
           navigate("/");
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");

@@ -32,7 +32,7 @@ router.post("/login", async (req, res) => {
       secure: true,
       sameSite: "None",
     });
-    return res.json("Success");
+    return res.json({ message: "Success", token: accessToken });
   } catch (error) {
     console.error("Login error:", error);
     return res
