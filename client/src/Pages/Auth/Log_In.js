@@ -39,12 +39,13 @@ const Login = () => {
   };
 
   return (
-    <div className="d-flex flex-column vh-100">
+    <div className="d-flex flex-column min-vh-100 overflow-hidden">
       <Navbar />
-      <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center">
+      <div className="d-flex flex-grow-1 flex-column align-items-center justify-content-center overflow-auto">
         <form
           method="POST"
           className="border border-secondary-subtle p-4 rounded shadow-sm"
+          style={{ fontSize: "16px" }}
         >
           <h3 align="left">Log In</h3>
           <div className="mb-3">
