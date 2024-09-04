@@ -440,7 +440,7 @@ def daily_update_db(data):
         if dining_hall == "Take Out at Ortega Commons":
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
-                {"$set": {"diningHall": []}}
+                {"$set": {"days": []}}
             )
             
             if result.modified_count > 0:
@@ -451,8 +451,8 @@ def daily_update_db(data):
             formatted_day = format_new_ortega_day(new_day_data)
             
             meals_collection.update_one(
-                {"_id": doc[0][0]["_id"]},
-                {"$set": {"diningHall": formatted_day}}
+                {"_id": doc["_id"]},
+                {"$push": {"days": formatted_day}}
             )
             
         elif doc and "days" in doc and len(doc["days"]) > 0:
@@ -509,26 +509,25 @@ def format_new_day(day_data):
     return formatted_day
 
 def format_new_ortega_day(day_data):
-    hall_doc = {"diningHall": "Take Out at Ortega Commons", "days": []}
     day_doc = {"day": "", "mealTimes": []}
     meal_time_doc = {"mealTime": "", "categories": []}
 
     for category, items in day_data.items():
-        category_doc = {"category": category, "items": []}
+        if category != "Primary Items":
+            category_doc = {"category": category, "items": []}
 
-        for item in items:
-            item_doc = {
-                "_id": ObjectId(),
-                "name": item["Item"],
-                "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
-            }
-            category_doc["items"].append(item_doc)
+            for item in items:
+                item_doc = {
+                    "_id": ObjectId(),
+                    "name": item["Item"],
+                    "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
+                }
+                category_doc["items"].append(item_doc)
 
-    meal_time_doc.append(category_doc)
-    day_doc.append(meal_time_doc)
-    hall_doc.append(day_doc)
+    meal_time_doc["categories"].append(category_doc)
+    day_doc["mealTimes"].append(meal_time_doc)
 
-    return hall_doc
+    return day_doc
 
 def scrape(get_most_recent_only=False):
     menu = getMenu(get_most_recent_only)
