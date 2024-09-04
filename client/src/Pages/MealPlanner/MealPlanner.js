@@ -152,7 +152,7 @@ const MealPlanner = () => {
           <>
             <button
               onClick={toggleCalculator}
-              className="btn btn-dark position-fixed bottom-0 end-0 m-3"
+              className="btn btn-dark position-fixed bottom-0 end-0 m-3 px-3 py-3"
               style={{ zIndex: 1030 }}
             >
               Meal Calculator
