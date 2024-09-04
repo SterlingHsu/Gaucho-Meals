@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import Navbar from "../../Components/Navbar";
-import Cookies from "js-cookies"
+import Cookies from "js-cookies";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -26,6 +26,7 @@ const Login = () => {
       .then((res) => {
         if (res.data === "Success") {
           console.log("Login success");
+          console.log("Cookie:", res.data.token);
           Cookies.set("access-token", res.data.token, {
             expires: 7,
             secure: true,
