@@ -44,14 +44,15 @@ const MainNavbar = () => {
       if (response.ok) {
         console.log("Nav check is okay");
         const data = await response.json();
-        console.log(data)
-        console.log(data.authenticated)
+        console.log(data);
         setIsAuthenticated(data.authenticated);
         localStorage.setItem(
           "isAuthenticated",
           JSON.stringify(data.authenticated)
         );
       } else {
+        const data = await response.json();
+        console.log(data);
         console.log("Nav check is not okay");
         setIsAuthenticated(false);
         localStorage.setItem("isAuthenticated", "false");
