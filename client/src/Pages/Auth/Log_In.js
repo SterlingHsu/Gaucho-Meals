@@ -44,6 +44,7 @@ const Login = () => {
       })
       .catch((err) => {
         console.log("Error response:", err.response);
+        navigate("/");
       });
   };
 
