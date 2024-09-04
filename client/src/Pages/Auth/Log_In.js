@@ -24,7 +24,7 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
-        if (res.data === "Success") {
+        if (res.data.message === "Success") {
           console.log("Login success");
           console.log("Cookie:", res.data.token);
           Cookies.set("access-token", res.data.token, {
