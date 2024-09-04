@@ -22,6 +22,8 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
+        console.log("res:", JSON.stringify(res))
+        console.log("res.data:", JSON.stringify(res.data))
         if (res.data === "Success") {
           navigate("/");
         } else if (res.data === "The email or password is incorrect") {
