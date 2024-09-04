@@ -11,7 +11,8 @@ const createTokens = (user) => {
 
 const validateToken = (req, res, next) => {
   const accessToken = req.cookies["access-token"];
-  console.log(JSON.stringify(req.cookies));
+  console.log(JSON.stringify("Cookies", req.cookies));
+  console.log(JSON.stringify("Authorization", req.headers.authorization))
   console.log("Access Token", accessToken);
 
   if (!accessToken)
