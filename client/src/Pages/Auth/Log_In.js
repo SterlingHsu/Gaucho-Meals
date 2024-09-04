@@ -24,7 +24,9 @@ const Login = () => {
       .then((res) => {
         console.log("res:", JSON.stringify(res))
         console.log("res.data:", JSON.stringify(res.data))
-        if (res.data === "Success") {
+        console.log("res.data:", JSON.stringify(res.data.message))
+
+        if (res.data.message === "Success") {
           navigate("/");
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");
