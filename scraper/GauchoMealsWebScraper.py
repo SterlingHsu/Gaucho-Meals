@@ -510,20 +510,22 @@ def format_new_day(day_data):
 
 def format_new_ortega_day(day_data):
     day_doc = {"day": "", "mealTimes": []}
-    meal_time_doc = {"mealTime": "", "categories": []}
+    meal_time_doc = {"mealTime": "", "categories": [], "primaryItems": []}
 
     for category, items in day_data.items():
-        if category != "Primary Items":
-            category_doc = {"category": category, "items": []}
+        if category == "Primary Items":
+            meal_time_doc["primaryItems"] = items
+            continue
+        
+        category_doc = {"category": category, "items": []}
 
-            for item in items:
-                item_doc = {
-                    "_id": ObjectId(),
-                    "name": item["Item"],
-                    "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
-                }
-                category_doc["items"].append(item_doc)
-
+        for item in items:
+            item_doc = {
+                "_id": ObjectId(),
+                "name": item["Item"],
+                "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
+            }
+            category_doc["items"].append(item_doc)
     meal_time_doc["categories"].append(category_doc)
     day_doc["mealTimes"].append(meal_time_doc)
 

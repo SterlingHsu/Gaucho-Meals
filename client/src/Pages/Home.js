@@ -36,6 +36,7 @@ const Home = () => {
       }
       grouped[hall.diningHall][hall.mealTime] = hall.primaryItems;
     });
+    console.log(grouped)
     return grouped;
   }, [primaryItems]);
 
@@ -59,7 +60,7 @@ const Home = () => {
                                 {mealTime}
                               </h6>
                               <div className="d-flex flex-wrap">
-                                {items.map((item, i) => (
+                                {items && items.map((item, i) => (
                                   <span
                                     key={i}
                                     className="badge bg-light text-dark me-2 mb-2"
