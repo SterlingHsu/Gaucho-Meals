@@ -23,7 +23,6 @@ const Login = () => {
       )
       .then((res) => {
         if (res.data.message === "Success") {
-          navigate("/");
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");
         } else if (
@@ -32,6 +31,7 @@ const Login = () => {
         ) {
           alert("The provided email is not associated with an existing user");
         }
+        navigate("/");
       })
       .catch((err) => {
         console.log("Error response:", err.response);

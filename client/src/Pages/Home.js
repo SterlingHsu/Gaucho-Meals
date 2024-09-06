@@ -36,7 +36,6 @@ const Home = () => {
       }
       grouped[hall.diningHall][hall.mealTime] = hall.primaryItems;
     });
-    console.log(grouped)
     return grouped;
   }, [primaryItems]);
 
