@@ -109,7 +109,7 @@ def getMenuItemInfo(driver):
 def processIngredients(ingredients):
     categories = {
         "hasSeedOils" : ["canola", "sunflower", "palm", "cottonseed", "soybean", "peanut oil", "margarine", "vegetable shortening", "vegetable oil", "crisco", "corn oil"],
-        "hasPreservatives" : ["potassium sorbate", "calcium disodium", "potassium metabisulfite"],
+        "hasPreservatives" : ["potassium sorbate", "calcium disodium", "potassium metabisulfite", "sodium benzoate"],
         "hasGums": ["gum"]
     }    
 
@@ -269,7 +269,6 @@ def format_dish_with_emoji(dish_name):
         'enchilada': '🌯',
         'fries': '🍟',
         'rib': '🍖',
-        'fajita': '🌮',
         'pad thai': '🍜',
         'noodle': '🍜',
         'sushi': '🍣',
@@ -289,9 +288,12 @@ def format_dish_with_emoji(dish_name):
         'falafel': '🧆',
         'pizza': '🍕',
         'chicken': '🍗',
+        'turkey': '🦃',
         'beef': '🥩',
         'oatmeal': '🌾',
         'pancake': '🥞',
+        'crepe': '🥞',
+        'macaroni & cheese': '🧀',
         'waffle': '🧇',
         'pork': '🥓',
         'fish': '🐟',
@@ -310,6 +312,7 @@ def format_dish_with_emoji(dish_name):
         'brownie': '🟫',
         'sausage': '🌭',
         'broccoli': '🥦',
+        'zucchini': '🥒',
         'roast': '🍖',
         'rice': '🍚',
         'tofu': '◻️',

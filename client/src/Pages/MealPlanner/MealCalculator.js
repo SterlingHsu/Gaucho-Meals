@@ -67,15 +67,15 @@ export const MealCalculator = ({
           </li>
           <li className="list-group-item d-flex justify-content-between">
             <span>Protein:</span>
-            <strong>{totalProtein.toFixed(2)}g</strong>
+            <strong>{totalProtein.toFixed(0)}g</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
             <span>Fat:</span>
-            <strong>{totalFat.toFixed(2)}g</strong>
+            <strong>{totalFat.toFixed(0)}g</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
             <span>Carbs:</span>
-            <strong>{totalCarbs.toFixed(2)}g</strong>
+            <strong>{totalCarbs.toFixed(0)}g</strong>
           </li>
         </ul>
 

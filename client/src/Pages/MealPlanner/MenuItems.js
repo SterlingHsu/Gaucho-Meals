@@ -14,7 +14,10 @@ const MenuItems = ({
   isMealSaved,
   saveVote,
   userVotes,
-  dietaryPreferences
+  dietaryPreferences,
+  selectedDiningHall,
+  selectedDay,
+  selectedMealTime,
 }) => {
   const breakpointColumnsObj = {
     default: 3,
@@ -51,18 +54,34 @@ const MenuItems = ({
       newVoteType === "positive" ? (voteValue = 1) : (voteValue = -1);
     }
 
-    saveVote(itemId, newVoteType, voteValue);
+    saveVote(
+      itemId,
+      newVoteType,
+      voteValue,
+      selectedDay,
+      selectedDiningHall,
+      selectedMealTime
+    );
   };
 
   const filterItemsByPreferences = (item) => {
     if (dietaryPreferences.length === 0) return true;
 
     // Logical equivalent of !(dietaryPreferences includes preference && item contradicts preference)
-    const noSeedOils = !dietaryPreferences.includes("No Seed Oils") || !item.nutritionalInfo.hasSeedOils;
-    const noPreservatives = !dietaryPreferences.includes("No Preservatives") || !item.nutritionalInfo.hasPreservatives;
-    const noGums = !dietaryPreferences.includes("No Gums") || !item.nutritionalInfo.hasGums;
-    const isVegetarian = !dietaryPreferences.includes("Vegetarian") || item.nutritionalInfo.isVegetarian || item.nutritionalInfo.isVegan;
-    const isVegan = !dietaryPreferences.includes("Vegan") || item.nutritionalInfo.isVegan;
+    const noSeedOils =
+      !dietaryPreferences.includes("No Seed Oils") ||
+      !item.nutritionalInfo.hasSeedOils;
+    const noPreservatives =
+      !dietaryPreferences.includes("No Preservatives") ||
+      !item.nutritionalInfo.hasPreservatives;
+    const noGums =
+      !dietaryPreferences.includes("No Gums") || !item.nutritionalInfo.hasGums;
+    const isVegetarian =
+      !dietaryPreferences.includes("Vegetarian") ||
+      item.nutritionalInfo.isVegetarian ||
+      item.nutritionalInfo.isVegan;
+    const isVegan =
+      !dietaryPreferences.includes("Vegan") || item.nutritionalInfo.isVegan;
 
     return noSeedOils && noPreservatives && noGums && isVegetarian && isVegan;
   };

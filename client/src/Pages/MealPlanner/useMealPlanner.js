@@ -89,7 +89,9 @@ export const useMealPlanner = () => {
     if (!hallMeals) return [];
 
     if (selectedDiningHall === "Take Out at Ortega Commons") {
-      return hallMeals.days[0].mealTimes[0].categories.filter((category) => category.category !== "Primary Items");
+      return hallMeals.days[0].mealTimes[0].categories.filter(
+        (category) => category.category !== "Primary Items"
+      );
     } else if (selectedDay && selectedMealTime) {
       const selectedDayMeals = hallMeals.days.find(
         (day) => day.day === selectedDay
@@ -101,7 +103,9 @@ export const useMealPlanner = () => {
       );
 
       return selectedMealTimeCategories
-        ? selectedMealTimeCategories.categories.filter((category) => category.category !== "Primary Items")
+        ? selectedMealTimeCategories.categories.filter(
+            (category) => category.category !== "Primary Items"
+          )
         : [];
     }
     return [];
@@ -221,48 +225,58 @@ export const useMealPlanner = () => {
   ]);
 
   // Votes for dishes
-  const saveVote = useCallback(async (itemId, newVoteType, voteValue) => {
-    try {
-      await axios.post(
-        `${apiUrl}/api/meals/vote/${itemId}`,
-        { voteValue },
-        {
-          withCredentials: true,
-        }
-      );
-
-      setUserVotes((prevVotes) => {
-        const currentVote = prevVotes[itemId];
-        let newVotes;
-
-        // Remove the vote if there was already one
-        if (currentVote === newVoteType) {
-          const { [itemId]: _, ...restVotes } = prevVotes;
-          newVotes = restVotes;
-        } else {
-          newVotes = {
-            ...prevVotes,
-            [itemId]: newVoteType,
-          };
-        }
-
-        saveVotesToStorage(
-          newVotes,
-          selectedDiningHall,
-          selectedDay,
-          selectedMealTime
+  const saveVote = useCallback(
+    async (
+      itemId,
+      newVoteType,
+      voteValue,
+      selectedDay,
+      selectedDiningHall,
+      selectedMealTime
+    ) => {
+      try {
+        await axios.post(
+          `${apiUrl}/api/meals/vote/${itemId}`,
+          { voteValue, selectedDay, selectedDiningHall, selectedMealTime },
+          {
+            withCredentials: true,
+          }
         );
 
-        return newVotes;
-      });
-    } catch (error) {
-      console.error(
-        "Error saving vote:",
-        error.response?.data || error.message
-      );
-    }
+        setUserVotes((prevVotes) => {
+          const currentVote = prevVotes[itemId];
+          let newVotes;
+
+          // Remove the vote if there was already one
+          if (currentVote === newVoteType) {
+            const { [itemId]: _, ...restVotes } = prevVotes;
+            newVotes = restVotes;
+          } else {
+            newVotes = {
+              ...prevVotes,
+              [itemId]: newVoteType,
+            };
+          }
+
+          saveVotesToStorage(
+            newVotes,
+            selectedDiningHall,
+            selectedDay,
+            selectedMealTime
+          );
+
+          return newVotes;
+        });
+      } catch (error) {
+        console.error(
+          "Error saving vote:",
+          error.response?.data || error.message
+        );
+      }
+    },
     // eslint-disable-next-line
-  }, []);
+    []
+  );
 
   const STORAGE_KEY = "userVotesDictionary";
   const EXPIRATION_DAYS = 7;
@@ -333,7 +347,7 @@ export const useMealPlanner = () => {
     if (storedVotes) {
       setUserVotes(storedVotes);
     }
-  }, [selectedDiningHall, selectedDay, selectedMealTime]);
+  }, [selectedDiningHall, selectedDay, selectedMealTime,]);
 
   const editMeal = useCallback(() => {
     setIsMealSaved(false);

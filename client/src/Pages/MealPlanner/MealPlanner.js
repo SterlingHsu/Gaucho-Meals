@@ -121,6 +121,9 @@ const MealPlanner = () => {
               saveVote={saveVote}
               userVotes={userVotes}
               dietaryPreferences={dietaryPreferences}
+              selectedDiningHall={selectedDiningHall}
+              selectedDay={selectedDay}
+              selectedMealTime={selectedMealTime}
             ></MenuItems>
           </div>
           {!isMobile && (

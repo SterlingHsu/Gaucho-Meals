@@ -163,7 +163,8 @@ router.post("/vote/:id", validateToken, async (req, res) => {
     const decodedToken = verify(accessToken, secret);
     const userId = new ObjectId(decodedToken._id);
     const itemId = new ObjectId(req.params.id);
-    const { voteValue } = req.body;
+    const { voteValue, selectedDay, selectedDiningHall, selectedMealTime } =
+      req.body;
 
     if (!userId || !voteValue) {
       return res
@@ -172,7 +173,12 @@ router.post("/vote/:id", validateToken, async (req, res) => {
     }
 
     const result = await Meal.findOneAndUpdate(
-      { "days.mealTimes.categories.items._id": itemId },
+      {
+        diningHall: selectedDiningHall,
+        "days.day": selectedDay,
+        "days.mealTimes.mealTime": selectedMealTime,
+        "days.mealTimes.categories.items._id": itemId,
+      },
       {
         $inc: {
           "days.$[].mealTimes.$[].categories.$[].items.$[item].netRating":
