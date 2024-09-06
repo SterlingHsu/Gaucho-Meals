@@ -529,7 +529,8 @@ def format_new_ortega_day(day_data):
                 "nutritionalInfo": {k: v for k, v in item.items() if k != "Item"}
             }
             category_doc["items"].append(item_doc)
-    meal_time_doc["categories"].append(category_doc)
+    
+        meal_time_doc["categories"].append(category_doc)
     day_doc["mealTimes"].append(meal_time_doc)
 
     return day_doc
