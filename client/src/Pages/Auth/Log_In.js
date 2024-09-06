@@ -22,6 +22,8 @@ const Login = () => {
         { withCredentials: true }
       )
       .then((res) => {
+        console.log("res:", res);
+        console.log("res data:", res.data);
         if (res.data.message === "Success") {
         } else if (res.data === "The email or password is incorrect") {
           alert("The email or password is incorrect. Please try again");
