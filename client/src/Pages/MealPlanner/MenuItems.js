@@ -92,7 +92,7 @@ const MenuItems = ({
       className="my-masonry-grid"
       columnClassName="my-masonry-grid_column"
     >
-      {getCategorizedItems.map((category, index) => (
+      {selectedDay && selectedMealTime && getCategorizedItems.map((category, index) => (
         <div key={index} className="mb-4">
           <h4 className="mb-3">{category.category}</h4>
           {category.items.filter(filterItemsByPreferences).map((item) => (
