@@ -35,12 +35,10 @@ mongoose.connect(process.env.MONGO_DB_URL);
 
 const authRoutes = require("./routes/authRoutes");
 const userRoutes = require("./routes/userRoutes");
-const otherRoutes = require("./routes/otherRoutes");
 const mealRoutes = require("./routes/mealRoutes");
 
 app.use("/api/auth", authRoutes);
 app.use("/api/users", userRoutes);
-app.use("/api/others", otherRoutes);
 app.use("/api/meals", mealRoutes);
 
 app.listen(PORT, () => {

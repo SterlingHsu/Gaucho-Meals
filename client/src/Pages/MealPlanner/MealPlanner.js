@@ -1,10 +1,10 @@
 import Navbar from "../../Components/Navbar";
 import React, { useState, useEffect, useRef } from "react";
-import { useMealPlanner } from "./useMealPlanner";
-import { SelectionForm } from "./SelectionForm";
-import { MealCalculator } from "./MealCalculator";
-import { MenuItems } from "./MenuItems";
-import { Modal } from "./Modal";
+import useMealPlanner from "./useMealPlanner";
+import SelectionForm from "./SelectionForm";
+import MealCalculator from "./MealCalculator";
+import MenuItems from "./MenuItems";
+import Modal from "./Modal";
 import { useLocation } from "react-router-dom";
 
 const MealPlanner = () => {
@@ -44,7 +44,7 @@ const MealPlanner = () => {
     showIngredients,
     initializeEditMeal,
   } = useMealPlanner();
-  
+
   const [showCalculator, setShowCalculator] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const sidebarRef = useRef(null);
@@ -71,7 +71,6 @@ const MealPlanner = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [setStickyTop]);
-
 
   useEffect(() => {
     const checkIfMobile = () => {
@@ -145,6 +144,8 @@ const MealPlanner = () => {
                 isMealSaved={isMealSaved}
                 saveMeal={saveMeal}
                 editMeal={editMeal}
+                selectedDay={selectedDay}
+                selectedMealTime={selectedMealTime}
               ></MealCalculator>
             </div>
           )}
@@ -166,7 +167,10 @@ const MealPlanner = () => {
               }`}
               tabIndex="-1"
               id="mealCalculator"
-              style={{ height: '90vh', transition: 'transform .3s ease-in-out' }}
+              style={{
+                height: "90vh",
+                transition: "transform .3s ease-in-out",
+              }}
             >
               <div className="offcanvas-header">
                 <h5 className="offcanvas-title">Meal Calculator</h5>

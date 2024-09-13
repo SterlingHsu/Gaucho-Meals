@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 
-export const useMealPlanner = () => {
+const useMealPlanner = () => {
   const [loading, setLoading] = useState(true);
   const [meals, setMeals] = useState(() => {
     const storedMeals = localStorage.getItem("meals");
@@ -441,3 +441,5 @@ export const useMealPlanner = () => {
     initializeEditMeal,
   };
 };
+
+export default useMealPlanner;

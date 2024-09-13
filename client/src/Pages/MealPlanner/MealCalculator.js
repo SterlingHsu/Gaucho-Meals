@@ -1,9 +1,13 @@
-export const MealCalculator = ({
+import React from "react";
+
+const MealCalculator = ({
   selectedItems,
   removeItemFromCalculator,
   isMealSaved,
   saveMeal,
   editMeal,
+  selectedDay,
+  selectedMealTime,
 }) => {
   const calculateNutritionalInfo = () => {
     let totalCalories = 0,
@@ -81,9 +85,20 @@ export const MealCalculator = ({
 
         <div className="d-flex justify-content-end">
           {!isMealSaved ? (
-            <button className="btn btn-success" onClick={() => saveMeal()}>
-              Save Meal
-            </button>
+            selectedDay && selectedMealTime ? (
+              <>
+                <span style={{ fontStyle: "italic" }}>
+                  Please select a day and meal time
+                </span>
+                <button className="btn btn-danger" disabled>
+                  Save Meal
+                </button>
+              </>
+            ) : (
+              <button className="btn btn-success" onClick={() => saveMeal()}>
+                Save Meal
+              </button>
+            )
           ) : (
             <>
               <button
@@ -102,3 +117,5 @@ export const MealCalculator = ({
     </div>
   );
 };
+
+export default React.memo(MealCalculator)

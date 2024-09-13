@@ -1,4 +1,4 @@
-export const SelectionForm = ({
+const SelectionForm = ({
   selectedDiningHall,
   selectedDay,
   selectedMealTime,
@@ -32,7 +32,7 @@ export const SelectionForm = ({
             ))}
           </select>
         </div>
-        
+
         <div className="col-md-4">
           <label htmlFor="daySelect" className="form-label fw-bold">
             Select Day:
@@ -52,7 +52,7 @@ export const SelectionForm = ({
             ))}
           </select>
         </div>
-        
+
         <div className="col-md-4">
           <label htmlFor="mealTimeSelect" className="form-label fw-bold">
             Select Meal Time:
@@ -78,16 +78,25 @@ export const SelectionForm = ({
         <div className="col-12">
           <label className="form-label fw-bold">Dietary Preferences:</label>
           <div className="d-flex flex-wrap">
-            {["No Seed Oils", "No Preservatives", "No Gums", "Vegetarian", "Vegan"].map((preference) => (
+            {[
+              "No Seed Oils",
+              "No Preservatives",
+              "No Gums",
+              "Vegetarian",
+              "Vegan",
+            ].map((preference) => (
               <div key={preference} className="form-check me-4">
                 <input
                   className="form-check-input"
                   type="checkbox"
-                  id={preference.replace(/\s+/g, '-').toLowerCase()}
+                  id={preference.replace(/\s+/g, "-").toLowerCase()}
                   checked={dietaryPreferences.includes(preference)}
                   onChange={() => handleDietaryPreferenceChange(preference)}
                 />
-                <label className="form-check-label" htmlFor={preference.replace(/\s+/g, '-').toLowerCase()}>
+                <label
+                  className="form-check-label"
+                  htmlFor={preference.replace(/\s+/g, "-").toLowerCase()}
+                >
                   {preference}
                 </label>
               </div>
@@ -98,3 +107,5 @@ export const SelectionForm = ({
     </div>
   );
 };
+
+export default SelectionForm;

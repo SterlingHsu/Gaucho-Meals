@@ -1,12 +1,18 @@
 const express = require("express");
-const { getMeals } = require("../controllers/mealsController");
 const { validateToken, verify, secret } = require("../JWT");
 const { ObjectId } = require("mongodb");
 const Users = require("../models/Users");
 const Meal = require("../models/Meal");
 const router = express.Router();
 
-router.get("/get-meals", getMeals);
+router.get("/get-meals", async (req, res) => {
+  try {
+    const meals = await Meal.find({});
+    res.json(meals);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+});
 
 router.post("/save-meal", validateToken, async (req, res) => {
   try {
@@ -72,61 +78,6 @@ router.post("/save-meal", validateToken, async (req, res) => {
   }
 });
 
-router.delete("/delete-meal/:id", validateToken, async (req, res) => {
-  const id = new ObjectId(req.params.id);
-
-  try {
-    const result = await Users.updateOne(
-      { "plannedMeals._id": id },
-      { $pull: { plannedMeals: { _id: id } } }
-    );
-
-    if (result.matchedCount === 0) {
-      return res.status(404).json({ error: "Meal not found" });
-    }
-
-    if (result.modifiedCount === 0) {
-      return res.status(400).json({ error: "Meal couldn't be deleted" });
-    }
-
-    res.status(200).json({ message: "Meal deleted successfully" });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Internal server error" });
-  }
-});
-
-router.get("/item/:id", async (req, res) => {
-  try {
-    const id = new ObjectId(req.params.id);
-
-    const result = await Meal.findOne(
-      { "days.mealTimes.categories.items._id": id },
-      { "days.$": 1 }
-    );
-
-    if (!result) {
-      console.log("Meal item not found");
-      return res.status(404).json({ error: "Meal item not found" });
-    }
-
-    const item = result.days[0].mealTimes
-      .flatMap((mealTime) => mealTime.categories)
-      .flatMap((category) => category.items)
-      .find((item) => item._id.equals(id));
-
-    if (!item) {
-      console.log("Meal item not found in the result");
-      return res.status(404).json({ error: "Meal item not found" });
-    }
-
-    res.json(item);
-  } catch (error) {
-    console.error("Error:", error);
-    res.status(500).json({ error: "Server error", details: error.message });
-  }
-});
-
 router.get("/primary-items", async (req, res) => {
   try {
     const currentDate = new Date().toLocaleDateString("en-US", {
@@ -153,6 +104,30 @@ router.get("/primary-items", async (req, res) => {
     res.json({ primaryItems: primaryItems });
   } catch (error) {
     console.error("Error fetching primary items:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+router.delete("/delete-meal/:id", validateToken, async (req, res) => {
+  const id = new ObjectId(req.params.id);
+
+  try {
+    const result = await Users.updateOne(
+      { "plannedMeals._id": id },
+      { $pull: { plannedMeals: { _id: id } } }
+    );
+
+    if (result.matchedCount === 0) {
+      return res.status(404).json({ error: "Meal not found" });
+    }
+
+    if (result.modifiedCount === 0) {
+      return res.status(400).json({ error: "Meal couldn't be deleted" });
+    }
+
+    res.status(200).json({ message: "Meal deleted successfully" });
+  } catch (error) {
+    console.error(error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -202,5 +177,37 @@ router.post("/vote/:id", validateToken, async (req, res) => {
     res.status(500).json({ message: "Internal server error" });
   }
 });
+
+router.get("/item/:id", async (req, res) => {
+  try {
+    const id = new ObjectId(req.params.id);
+
+    const result = await Meal.findOne(
+      { "days.mealTimes.categories.items._id": id },
+      { "days.$": 1 }
+    );
+
+    if (!result) {
+      console.log("Meal item not found");
+      return res.status(404).json({ error: "Meal item not found" });
+    }
+
+    const item = result.days[0].mealTimes
+      .flatMap((mealTime) => mealTime.categories)
+      .flatMap((category) => category.items)
+      .find((item) => item._id.equals(id));
+
+    if (!item) {
+      console.log("Meal item not found in the result");
+      return res.status(404).json({ error: "Meal item not found" });
+    }
+
+    res.json(item);
+  } catch (error) {
+    console.error("Error:", error);
+    res.status(500).json({ error: "Server error", details: error.message });
+  }
+});
+
 
 module.exports = router;

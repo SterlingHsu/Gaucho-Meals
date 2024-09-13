@@ -1,4 +1,4 @@
-export const Modal = ({ isOpen, onClose, title, children }) => {
+const Modal = ({ isOpen, onClose, title, children }) => {
   if (!isOpen) return null;
 
   const handleOutsideClick = (e) => {
@@ -35,3 +35,5 @@ export const Modal = ({ isOpen, onClose, title, children }) => {
     </div>
   );
 };
+
+export default Modal;
