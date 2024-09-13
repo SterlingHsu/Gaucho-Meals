@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Axios from "axios";
 import Navbar from "../../Components/Navbar";
-import "../../Static/Styles/styles.css";
 import validator from "validator";
 import zxcvbn from "zxcvbn";
 

@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import "../Static/Styles/styles.css";
 
 const UserSurvey = () => {
   const navigate = useNavigate();
