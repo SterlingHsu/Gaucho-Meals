@@ -83,11 +83,11 @@ const MealCalculator = ({
           </li>
         </ul>
 
-        <div className="d-flex justify-content-end">
+        <div className="d-flex justify-content-end align-items-center">
           {!isMealSaved ? (
-            selectedDay && selectedMealTime ? (
+            !(selectedDay && selectedMealTime) ? (
               <>
-                <span style={{ fontStyle: "italic" }}>
+                <span className="me-2 fst-italic text-muted">
                   Please select a day and meal time
                 </span>
                 <button className="btn btn-danger" disabled>
@@ -118,4 +118,4 @@ const MealCalculator = ({
   );
 };
 
-export default React.memo(MealCalculator)
+export default React.memo(MealCalculator);

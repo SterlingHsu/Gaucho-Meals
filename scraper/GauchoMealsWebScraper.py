@@ -469,14 +469,14 @@ def daily_update_db(data):
             else:
                 print(f"No update was made for {dining_hall}. The document may not exist or may have an empty days array.")
             
-            formatted_day = format_new_day(new_day_data)
+            formatted_day, day = format_new_day(new_day_data)
             
             meals_collection.update_one(
                 {"_id": doc["_id"]},
                 {"$push": {"days": formatted_day }}
             )
 
-            print(f"Updated {dining_hall} with new day data.")
+            print(f"Updated {dining_hall} with data for {day}.")
         else:
             print(f"No existing data found for {dining_hall} or empty days array.")
 
@@ -509,7 +509,7 @@ def format_new_day(day_data):
                     category_doc["items"].append(item_doc)
                 meal_time_doc["categories"].append(category_doc)
         formatted_day["mealTimes"].append(meal_time_doc)
-    return formatted_day
+    return formatted_day, day
 
 def format_new_ortega_day(day_data):
     day_doc = {"day": "", "mealTimes": []}

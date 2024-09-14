@@ -33,22 +33,6 @@ const useMealPlanner = () => {
     localStorage.setItem("selectedItems", JSON.stringify(selectedItems));
   }, [selectedItems]);
 
-  useEffect(() => {
-    localStorage.setItem("selectedDiningHall", selectedDiningHall);
-  }, [selectedDiningHall]);
-
-  useEffect(() => {
-    localStorage.setItem("selectedDay", selectedDay);
-  }, [selectedDay]);
-
-  useEffect(() => {
-    localStorage.setItem("selectedMealTime", selectedMealTime);
-  }, [selectedMealTime]);
-
-  useEffect(() => {
-    localStorage.setItem("isMealSaved", isMealSaved);
-  }, [isMealSaved]);
-
   const initializeEditMeal = useCallback((diningHall, day, mealTime, items) => {
     setSelectedDiningHall(diningHall);
     setSelectedDay(day);
@@ -209,6 +193,7 @@ const useMealPlanner = () => {
         withCredentials: true,
       });
       setIsMealSaved(true);
+      localStorage.setItem("isMealSaved", true);
     } catch (error) {
       console.error(
         "Error saving meal:",
@@ -299,7 +284,7 @@ const useMealPlanner = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(currentDictionary));
   };
 
-  const getVotesFromStorage = (diningHall, date, mealtime) => {
+  const getVotesFromStorage = useCallback((diningHall, date, mealtime) => {
     const storageKey = getStorageKey(diningHall, date, mealtime);
     const currentDictionary = JSON.parse(
       localStorage.getItem(STORAGE_KEY) || "{}"
@@ -316,7 +301,7 @@ const useMealPlanner = () => {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(currentDictionary));
     }
     return null;
-  };
+  }, []);
 
   const cleanExpiredVotes = () => {
     const currentDictionary = JSON.parse(
@@ -347,17 +332,20 @@ const useMealPlanner = () => {
     if (storedVotes) {
       setUserVotes(storedVotes);
     }
-  }, [selectedDiningHall, selectedDay, selectedMealTime,]);
+  }, [selectedDiningHall, selectedDay, selectedMealTime, getVotesFromStorage]);
 
   const editMeal = useCallback(() => {
     setIsMealSaved(false);
+    localStorage.setItem("isMealSaved", false);
   }, [setIsMealSaved]);
 
   const handleDiningHallChange = useCallback(
     (diningHall) => {
       setSelectedDiningHall(diningHall);
       setSelectedDay("");
+      localStorage.setItem("selectedDay", "");
       setSelectedMealTime("");
+      localStorage.setItem("selectedMealTime", "");
       setSelectedItems({});
       setIsMealSaved(false);
     },
@@ -373,7 +361,9 @@ const useMealPlanner = () => {
   const handleDayChange = useCallback(
     (day) => {
       setSelectedDay(day);
+      localStorage.setItem("selectedDay", day);
       setSelectedMealTime("");
+      localStorage.setItem("selectedMealTime", "");
       setSelectedItems({});
       setIsMealSaved(false);
     },
@@ -383,6 +373,7 @@ const useMealPlanner = () => {
   const handleMealTimeChange = useCallback(
     (mealTime) => {
       setSelectedMealTime(mealTime);
+      localStorage.setItem("selectedMealTime", mealTime);
       setSelectedItems({});
       setIsMealSaved(false);
     },
