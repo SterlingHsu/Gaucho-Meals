@@ -188,6 +188,8 @@ const MealPlanner = () => {
                   isMealSaved={isMealSaved}
                   saveMeal={saveMeal}
                   editMeal={editMeal}
+                  selectedDay={selectedDay}
+                  selectedMealTime={selectedMealTime}
                 ></MealCalculator>
               </div>
             </div>
