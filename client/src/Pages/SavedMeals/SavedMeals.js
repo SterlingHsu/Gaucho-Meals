@@ -100,7 +100,7 @@ const SavedMeals = () => {
             <h1>No meals planned yet!</h1>
           </div>
         ) : (
-          dates.map((date, dateIndex) => (
+          dates.map((date) => (
             <div key={date} className="mb-3">
               <h4
                 className={`mb-2 p-3 text-black ${
@@ -117,7 +117,7 @@ const SavedMeals = () => {
                     <div key={mealIndex} className="col">
                       <div className="card h-100 shadow">
                         <div className="card-header d-flex justify-content-between align-items-center py-3">
-                          <span className="fw-bold text-black">
+                          <span className="mb-0 fw-bold text-black">
                             {meal.mealTime} at {meal.diningHall}
                           </span>
                           <button
@@ -127,58 +127,39 @@ const SavedMeals = () => {
                             <FontAwesomeIcon icon={faTrashCan} />
                           </button>
                         </div>
-                        <div className="card-body p-4">
-                          <div className="row g-3">
-                            <div className="col-sm-7">
-                              <h6 className="card-subtitle mb-3 text-muted">
-                                Items
-                              </h6>
-                              <ul className="list-group list-group-flush">
-                                {meal.items.map((item, idx) => (
-                                  <li
-                                    key={idx}
-                                    className="list-group-item px-0 py-1 border-0"
-                                  >
-                                    {item.name} x {item.quantity || 1}
-                                  </li>
-                                ))}
-                              </ul>
-                            </div>
-                            <div className="col-sm-5">
-                              <h6 className="card-subtitle mb-3 text-muted">
-                                Nutrition
-                              </h6>
-                              <ul className="list-group list-group-flush">
-                                <li className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0">
-                                  <span>Calories:</span>
-                                  <span className="badge bg-primary rounded-pill">
-                                    {totalCalories.toFixed(0)}
-                                  </span>
-                                </li>
-                                <li className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0">
-                                  <span>Protein:</span>
-                                  <span className="badge bg-success rounded-pill">
-                                    {totalProtein.toFixed(0)}g
-                                  </span>
-                                </li>
-                                <li className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0">
-                                  <span>Fat:</span>
-                                  <span className="badge bg-warning rounded-pill">
-                                    {totalFat.toFixed(0)}g
-                                  </span>
-                                </li>
-                                <li className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0">
-                                  <span>Carbs:</span>
-                                  <span className="badge bg-info rounded-pill">
-                                    {totalCarbs.toFixed(0)}g
-                                  </span>
-                                </li>
-                              </ul>
+                        <div className="card-body p-2">
+                          <div className="d-flex justify-content-between mb-2">
+                            <div className="nutrition-summary">
+                              <span className="badge bg-primary me-1">
+                                {totalCalories.toFixed(0)} Calories
+                              </span>
+                              <span className="badge bg-success me-1">
+                                {totalProtein.toFixed(0)}g Protein
+                              </span>
+                              <span className="badge bg-warning me-1">
+                                {totalFat.toFixed(0)}g Fats
+                              </span>
+                              <span className="badge bg-info">
+                                {totalCarbs.toFixed(0)}g Carbs
+                              </span>
                             </div>
                           </div>
+                          <ul className="list-group list-group-flush">
+                            {meal.items.map((item, idx) => (
+                              <li
+                                key={idx}
+                                className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0"
+                              >
+                                <span>{item.name}</span>
+                                <span className="badge bg-secondary">
+                                  x {item.quantity || 1}
+                                </span>
+                              </li>
+                            ))}
+                          </ul>
                         </div>
                         <div className="card-footer bg-transparent border-top-0 text-end">
-                          {dateIndex < 7 && (
+                          {mealIndex < 7 && (
                             <button
                               className="btn btn-outline-primary btn-sm"
                               onClick={() => editMeal(meal)}
@@ -196,6 +177,24 @@ const SavedMeals = () => {
           ))
         )}
       </div>
+      <style>{`
+        .nutrition-summary .badge {
+          font-size: 0.8rem;
+        }
+        @media (max-width: 576px) {
+          .card-body {
+            padding: 0.5rem !important;
+          }
+          .nutrition-summary {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.25rem;
+          }
+          .nutrition-summary .badge {
+            font-size: 0.7rem;
+          }
+        }
+      `}</style>
     </>
   );
 };

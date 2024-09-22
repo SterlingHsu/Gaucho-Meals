@@ -232,19 +232,20 @@ def getMenuItemsByDiningHall(dining_hall, get_most_recent_only=True):
     driver.get("https://nutrition.info.dining.ucsb.edu/NetNutrition/1#")
     if click_with_retry(driver, f"//a[@class='text-white' and contains(text(), '{dining_hall}')]", retries=3):
         if click_with_retry(driver, "//a[@class='text-white']", retries=3):
-            if dining_hall == "Take Out at Ortega Commons":
+            if dining_hall == "Takeout at Ortega Commons":
                 menu = getMenuItemsByCategory(driver)
             else:
                 menu = getMenuItemsByDay(driver, get_most_recent_only)
     else:
-        print(f"Failed to click dining hall link for {dining_hall}")
+        print(f"Failed to click dining hall link for {dining_hall}. Retrieval failed, will not include in data")
+        return
     
     driver.quit()
     
     return menu
 
 def getMenu(get_most_recent_only=True):
-    dining_halls = ["Take Out at Ortega Commons", "De La Guerra Dining Commons", "Carrillo Dining Commons", "Portola Dining Commons"]
+    dining_halls = ["Takeout at Ortega Commons", "De La Guerra Dining Commons", "Carrillo Dining Commons", "Portola Dining Commons"]
     menu = {}
     
     for dining_hall in dining_halls:
@@ -269,6 +270,7 @@ def format_dish_with_emoji(dish_name):
         'enchilada': '🌯',
         'fries': '🍟',
         'rib': '🍖',
+        'fajita': '🌮',
         'pad thai': '🍜',
         'noodle': '🍜',
         'sushi': '🍣',
@@ -327,7 +329,7 @@ def format_dish_with_emoji(dish_name):
 
 def setPrimaryItems(menu):
     for dining_common_name, dining_common_data in menu.items():
-        if dining_common_name != "Take Out at Ortega Commons":
+        if dining_common_name != "Takeout at Ortega Commons":
             for date, meals in dining_common_data.items():
                 for meal, categories in meals.items():
                     primary_items = []
@@ -347,13 +349,13 @@ def setPrimaryItems(menu):
                     for item in items:
                         primary_items.append(format_dish_with_emoji(item['Item']))
 
-            menu["Take Out at Ortega Commons"]['Primary Items'] = primary_items          
+            menu["Takeout at Ortega Commons"]['Primary Items'] = primary_items          
     
     return menu
 
 def printMenu(menu):
     for dining_common_name, dining_common_data in menu.items():
-        if dining_common_name != "Take Out at Ortega Commons":
+        if dining_common_name != "Takeout at Ortega Commons":
             print("Name of Dining Common:", dining_common_name)
             for date, meals in dining_common_data.items():
                 print("\nMeals for", date)
@@ -376,8 +378,8 @@ def save_to_db(data):
     meals_collection.delete_many({})  # Clear the collection
 
     for hall, days in data.items():
-        if hall == "Take Out at Ortega Commons":
-            hall_doc = {"diningHall": "Take Out at Ortega Commons", "days": []}
+        if hall == "Takeout at Ortega Commons":
+            hall_doc = {"diningHall": "Takeout at Ortega Commons", "days": []}
             day_doc = {"day": "", "mealTimes": []}
             meal_time_doc = {"mealTime": "", "categories": []}
             
@@ -440,7 +442,7 @@ def daily_update_db(data):
     
     for dining_hall, new_day_data in data.items():
         doc = meals_collection.find_one({"diningHall": dining_hall})
-        if dining_hall == "Take Out at Ortega Commons":
+        if dining_hall == "Takeout at Ortega Commons":
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
                 {"$set": {"days": []}}

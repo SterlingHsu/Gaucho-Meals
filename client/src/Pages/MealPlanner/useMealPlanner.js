@@ -72,7 +72,7 @@ const useMealPlanner = () => {
     );
     if (!hallMeals) return [];
 
-    if (selectedDiningHall === "Take Out at Ortega Commons") {
+    if (selectedDiningHall === "Takeout at Ortega Commons") {
       return hallMeals.days[0].mealTimes[0].categories.filter(
         (category) => category.category !== "Primary Items"
       );
@@ -101,7 +101,7 @@ const useMealPlanner = () => {
 
   const getDays = useMemo(() => {
     if (!selectedDiningHall) return [];
-    else if (selectedDiningHall === "Take Out at Ortega Commons")
+    else if (selectedDiningHall === "Takeout at Ortega Commons")
       return Array.from(
         new Set(
           meals
@@ -120,8 +120,9 @@ const useMealPlanner = () => {
   }, [meals, selectedDiningHall]);
 
   const getMealTimes = useMemo(() => {
+    console.log(meals)
     if (!selectedDiningHall || !selectedDay) return [];
-    else if (selectedDiningHall === "Take Out at Ortega Commons")
+    else if (selectedDiningHall === "Takeout at Ortega Commons")
       return ["Breakfast", "Lunch", "Dinner"];
     else
       return Array.from(
