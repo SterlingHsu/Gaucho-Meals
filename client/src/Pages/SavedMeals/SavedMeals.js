@@ -65,6 +65,24 @@ const SavedMeals = () => {
     return { totalCalories, totalProtein, totalFat, totalCarbs };
   };
 
+  const calculateDailyNutrition = (meals) => {
+    let dailyCalories = 0,
+      dailyProtein = 0,
+      dailyFat = 0,
+      dailyCarbs = 0;
+
+    meals.forEach((meal) => {
+      const { totalCalories, totalProtein, totalFat, totalCarbs } =
+        calculateTotalNutrition(meal.items);
+      dailyCalories += totalCalories;
+      dailyProtein += totalProtein;
+      dailyFat += totalFat;
+      dailyCarbs += totalCarbs;
+    });
+
+    return { dailyCalories, dailyProtein, dailyFat, dailyCarbs };
+  };
+
   const editMeal = (meal) => {
     navigate("/meal-planner", {
       state: {
@@ -77,16 +95,29 @@ const SavedMeals = () => {
     });
   };
 
+  const DailyNutritionSummary = ({ nutrition }) => (
+    <div className="daily-nutrition-summary">
+      <span className="text-muted me-2">Total:</span>
+      <span className="badge bg-primary me-1">
+        {nutrition.dailyCalories.toFixed(0)} Cal
+      </span>
+      <span className="badge bg-success me-1">
+        {nutrition.dailyProtein.toFixed(0)}g Pro
+      </span>
+      <span className="badge bg-warning me-1">
+        {nutrition.dailyFat.toFixed(0)}g Fat
+      </span>
+      <span className="badge bg-info">
+        {nutrition.dailyCarbs.toFixed(0)}g Carb
+      </span>
+    </div>
+  );
+
   return (
     <>
       <Navbar />
       <div className="container-fluid px-5 mt-3">
-        <h2
-          className="fw-bold mb-3"
-          style={{ display: "inline", marginRight: "15px" }}
-        >
-          Planned Meals
-        </h2>
+        <h2 className="fw-bold mb-3">Planned Meals</h2>
         {loading ? (
           <span style={{ fontStyle: "italic" }}>Updating data...</span>
         ) : savedMeals.length === 0 ? (
@@ -101,14 +132,19 @@ const SavedMeals = () => {
           </div>
         ) : (
           dates.map((date) => (
-            <div key={date} className="mb-3">
-              <h4
-                className={`mb-2 p-3 text-black ${
+            <div key={date} className="mb-4">
+              <div
+                className={`d-flex flex-column align-items-md-center mb-2 p-3 ${
                   date === today ? "bg-light rounded" : ""
                 }`}
               >
-                {date === today ? `Today - ${date}` : date}
-              </h4>
+                <h4 className="mb-2 mb-md-0 me-md-3">
+                  {date === today ? `Today - ${date}` : date}
+                </h4>
+                <DailyNutritionSummary
+                  nutrition={calculateDailyNutrition(groupedMeals[date])}
+                />
+              </div>
               <div className="row row-cols-1 row-cols-md-3 g-4">
                 {groupedMeals[date].map((meal, mealIndex) => {
                   const { totalCalories, totalProtein, totalFat, totalCarbs } =
@@ -130,17 +166,18 @@ const SavedMeals = () => {
                         <div className="card-body p-2">
                           <div className="d-flex justify-content-between mb-2">
                             <div className="nutrition-summary">
+                              <span className="text-muted me-2">Total:</span>
                               <span className="badge bg-primary me-1">
-                                {totalCalories.toFixed(0)} Calories
+                                {totalCalories.toFixed(0)} Cal
                               </span>
                               <span className="badge bg-success me-1">
-                                {totalProtein.toFixed(0)}g Protein
+                                {totalProtein.toFixed(0)}g Pro
                               </span>
                               <span className="badge bg-warning me-1">
-                                {totalFat.toFixed(0)}g Fats
+                                {totalFat.toFixed(0)}g Fat
                               </span>
                               <span className="badge bg-info">
-                                {totalCarbs.toFixed(0)}g Carbs
+                                {totalCarbs.toFixed(0)}g Carb
                               </span>
                             </div>
                           </div>
@@ -159,14 +196,12 @@ const SavedMeals = () => {
                           </ul>
                         </div>
                         <div className="card-footer bg-transparent border-top-0 text-end">
-                          {mealIndex < 7 && (
-                            <button
-                              className="btn btn-outline-primary btn-sm"
-                              onClick={() => editMeal(meal)}
-                            >
-                              Edit Meal
-                            </button>
-                          )}
+                          <button
+                            className="btn btn-outline-primary btn-sm"
+                            onClick={() => editMeal(meal)}
+                          >
+                            Edit Meal
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -178,19 +213,23 @@ const SavedMeals = () => {
         )}
       </div>
       <style>{`
-        .nutrition-summary .badge {
+        .nutrition-summary .badge,
+        .daily-nutrition-summary .badge {
           font-size: 0.8rem;
         }
         @media (max-width: 576px) {
           .card-body {
             padding: 0.5rem !important;
           }
-          .nutrition-summary {
+          .nutrition-summary,
+          .daily-nutrition-summary {
             display: flex;
             flex-wrap: wrap;
+            align-items: center;
             gap: 0.25rem;
           }
-          .nutrition-summary .badge {
+          .nutrition-summary .badge,
+          .daily-nutrition-summary .badge {
             font-size: 0.7rem;
           }
         }

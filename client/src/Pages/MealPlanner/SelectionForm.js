@@ -62,7 +62,7 @@ const SelectionForm = ({
             className="form-select form-select-lg shadow-sm"
             onChange={(e) => handleMealTimeChange(e.target.value)}
             value={selectedMealTime}
-            disabled={!selectedDay}
+            disabled={!selectedDay || !selectedDiningHall}
           >
             <option value="">Select a Meal Time</option>
             {getMealTimes.map((mealTime, index) => (
