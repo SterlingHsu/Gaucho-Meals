@@ -120,7 +120,6 @@ const useMealPlanner = () => {
   }, [meals, selectedDiningHall]);
 
   const getMealTimes = useMemo(() => {
-    console.log(meals)
     if (!selectedDiningHall || !selectedDay) return [];
     else if (selectedDiningHall === "Takeout at Ortega Commons")
       return ["Breakfast", "Lunch", "Dinner"];
