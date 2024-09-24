@@ -132,9 +132,9 @@ const SavedMeals = () => {
           </div>
         ) : (
           dates.map((date) => (
-            <div key={date} className="mb-4">
+            <div key={date} className="mb-3">
               <div
-                className={`d-flex flex-column align-items-md-center mb-2 p-3 ${
+                className={`d-flex flex-column align-items-md-center mb-2 ${
                   date === today ? "bg-light rounded" : ""
                 }`}
               >
@@ -164,7 +164,7 @@ const SavedMeals = () => {
                           </button>
                         </div>
                         <div className="card-body p-2">
-                          <div className="d-flex justify-content-between mb-2">
+                          <div className="d-flex justify-content-between mb-2 ms-2">
                             <div className="nutrition-summary">
                               <span className="text-muted me-2">Total:</span>
                               <span className="badge bg-primary me-1">
@@ -185,7 +185,7 @@ const SavedMeals = () => {
                             {meal.items.map((item, idx) => (
                               <li
                                 key={idx}
-                                className="list-group-item px-0 py-1 d-flex justify-content-between align-items-center border-0"
+                                className="list-group-item p-2 py-1 d-flex justify-content-between align-items-center border-0"
                               >
                                 <span>{item.name}</span>
                                 <span className="badge bg-secondary">
