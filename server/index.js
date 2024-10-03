@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const keepAlive = require("./keepAlive");
 require("dotenv").config();
 
 const app = express();
@@ -43,19 +44,5 @@ app.use("/api/meals", mealRoutes);
 
 app.listen(PORT, () => {
   console.log(`Connected! Running on ${PORT}`);
+  keepAlive();
 });
-
-const BACKEND_URL = process.env.BACKEND_URL
-const interval = 30000;
-
-function reloadWebsite() {
-  axios.get(BACKEND_URL)
-    .then(response => {
-      console.log(`Reloaded at ${new Date().toISOString()}: Status Code ${response.status}`);
-    })
-    .catch(error => {
-      console.error(`Error reloading at ${new Date().toISOString()}:`, error.message);
-    });
-}
-
-setInterval(reloadWebsite, interval);
