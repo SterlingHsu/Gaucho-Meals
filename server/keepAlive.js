@@ -2,17 +2,20 @@ const axios = require("axios");
 require("dotenv").config();
 
 const BACKEND_URL = process.env.BACKEND_URL;
-const interval = 30000;
-
+let tick = 0;
 function keepAlive() {
   axios
     .get(BACKEND_URL)
     .then((response) => {
-      console.log(
-        `Keep-alive ping at ${new Date().toISOString()}: Status Code ${
-          response.status
-        }`
-      );
+      // Log keep-alive ping once an hour
+      if (tick >= 120) {
+        console.log(
+          `Keep-alive ping at ${new Date().toISOString()}: Status Code ${
+            response.status
+          }`
+        );
+        tick = 0;
+      }
     })
     .catch((error) => {
       console.error(
@@ -20,8 +23,7 @@ function keepAlive() {
         error.message
       );
     });
+  tick++;
 }
-
-setInterval(keepAlive, interval);
 
 module.exports = keepAlive;

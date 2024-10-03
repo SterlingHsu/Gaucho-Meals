@@ -44,5 +44,5 @@ app.use("/api/meals", mealRoutes);
 
 app.listen(PORT, () => {
   console.log(`Connected! Running on ${PORT}`);
-  keepAlive();
+  if (process.env.NODE_ENV) setInterval(keepAlive, 30000);
 });
