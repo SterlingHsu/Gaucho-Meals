@@ -9,6 +9,15 @@ const MealCalculator = ({
   selectedDay,
   selectedMealTime,
 }) => {
+  const parseNutrientField = (item, nutrient) => {
+    let nutrientData = item.nutritionalInfo[nutrient];
+    if (typeof nutrientData === "string" && nutrientData.includes("<")) {
+      nutrientData = 0;
+    } else {
+      nutrientData = parseFloat(nutrientData);
+    }
+    return nutrientData;
+  };
   const calculateNutritionalInfo = () => {
     let totalCalories = 0,
       totalProtein = 0,
@@ -18,15 +27,10 @@ const MealCalculator = ({
     Object.values(selectedItems).forEach((item) => {
       totalCalories +=
         parseFloat(item.nutritionalInfo.Calories) * item.quantity;
-      totalProtein += parseFloat(item.nutritionalInfo.Protein) * item.quantity;
-      totalFat += parseFloat(item.nutritionalInfo["Total Fat"]) * item.quantity;
-      let carbs = item.nutritionalInfo["Total Carbohydrate"];
-      if (typeof carbs === "string" && carbs.includes("<")) {
-        carbs = 0;
-      } else {
-        carbs = parseFloat(carbs);
-      }
-      totalCarbs += carbs * item.quantity;
+      totalProtein += parseNutrientField(item, "Protein") * item.quantity;
+      totalFat += parseNutrientField(item, "Total Fat") * item.quantity;
+      totalCarbs +=
+        parseNutrientField(item, "Total Carbohydrate") * item.quantity;
     });
 
     return { totalCalories, totalProtein, totalFat, totalCarbs };
