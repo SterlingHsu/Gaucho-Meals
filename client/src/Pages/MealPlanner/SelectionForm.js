@@ -79,11 +79,11 @@ const SelectionForm = ({
           <label className="form-label fw-bold">Dietary Preferences</label>
           <div className="d-flex flex-wrap">
             {[
-              "No Seed Oils",
-              "No Preservatives",
-              "No Gums",
               "Vegetarian",
               "Vegan",
+              "No Gums",
+              "No Seed Oils",
+              "No Preservatives",
             ].map((preference) => (
               <div key={preference} className="form-check me-4">
                 <input

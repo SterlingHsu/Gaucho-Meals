@@ -253,8 +253,8 @@ def getMenu(get_most_recent_only=True):
             print("Retrieving for", dining_hall)
             menu[dining_hall] = getMenuItemsByDiningHall(dining_hall, get_most_recent_only)
             print("Retrieved for", dining_hall)
-        except:
-            print("Retrieval unsuccessful")
+        except Exception as e:
+            print("Retrieval unsuccessful. Error:", e)
     
     setPrimaryItems(menu)
     
