@@ -16,7 +16,7 @@ const SelectionForm = ({
       <div className="row g-3 align-items-end">
         <div className="col-md-4">
           <label htmlFor="diningHallSelect" className="form-label fw-bold">
-            Select Dining Hall:
+            Dining Hall
           </label>
           <select
             id="diningHallSelect"
@@ -35,7 +35,7 @@ const SelectionForm = ({
 
         <div className="col-md-4">
           <label htmlFor="daySelect" className="form-label fw-bold">
-            Select Day:
+            Day
           </label>
           <select
             id="daySelect"
@@ -55,7 +55,7 @@ const SelectionForm = ({
 
         <div className="col-md-4">
           <label htmlFor="mealTimeSelect" className="form-label fw-bold">
-            Select Meal Time:
+            Meal Time
           </label>
           <select
             id="mealTimeSelect"
@@ -76,7 +76,7 @@ const SelectionForm = ({
 
       <div className="row mt-4">
         <div className="col-12">
-          <label className="form-label fw-bold">Dietary Preferences:</label>
+          <label className="form-label fw-bold">Dietary Preferences</label>
           <div className="d-flex flex-wrap">
             {[
               "No Seed Oils",
