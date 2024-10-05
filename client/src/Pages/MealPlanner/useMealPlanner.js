@@ -342,6 +342,7 @@ const useMealPlanner = () => {
   const handleDiningHallChange = useCallback(
     (diningHall) => {
       setSelectedDiningHall(diningHall);
+      localStorage.setItem("selectedDiningHall", diningHall)
       setSelectedDay("");
       localStorage.setItem("selectedDay", "");
       setSelectedMealTime("");
