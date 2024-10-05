@@ -134,7 +134,7 @@ const SavedMeals = () => {
           dates.map((date) => (
             <div key={date} className="mb-3">
               <div
-                className={`d-flex flex-column align-items-md-center mb-2 ${
+                className={`d-flex flex-column align-items-md-center mb-2 p-2 ${
                   date === today ? "bg-light rounded" : ""
                 }`}
               >
