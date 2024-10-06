@@ -18,10 +18,13 @@ function keepAlive() {
       }
     })
     .catch((error) => {
-      console.error(
-        `Error pinging at ${new Date().toISOString()}:`,
-        error.message
-      );
+      if (tick >= 120) {
+        console.error(
+          `Error pinging at ${new Date().toISOString()}:`,
+          error.message
+        );
+        tick = 0;
+      }
     });
   tick++;
 }
