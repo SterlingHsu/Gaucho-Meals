@@ -137,7 +137,7 @@ def getMenuItemsByCategory(driver):
         items_in_category = []
         while next_tr and "cbo_nn_itemGroupRow" not in next_tr.get("class", []):
             menu_item = next_tr.find("a").get_text().strip()
-            menu_item_link_element = driver.find_element(By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")
+            menu_item_link_element = wait.until(EC.presence_of_element_located((By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")))
             if menu_item_link_element:
                 menu_item_link_element.click()
                 nutritional_info = getMenuItemInfo(driver)
@@ -461,13 +461,14 @@ def daily_update_db(data):
             )
             
         elif doc and "days" in doc and len(doc["days"]) > 0:
+            day = doc["days"][0]["day"]
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
                 {"$pop": {"days": -1}}
             )
             
             if result.modified_count > 0:
-                print(f"Successfully removed the first day from {dining_hall}")
+                print(f"Successfully removed the first day, {day} from {dining_hall}")
             else:
                 print(f"No update was made for {dining_hall}. The document may not exist or may have an empty days array.")
             
