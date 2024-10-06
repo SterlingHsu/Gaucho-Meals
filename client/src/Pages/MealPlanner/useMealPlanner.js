@@ -129,7 +129,8 @@ const useMealPlanner = () => {
           meals
             .find((meal) => meal.diningHall === selectedDiningHall)
             .days.find((day) => day.day === selectedDay)
-            .mealTimes.map((mealTime) => mealTime.mealTime)
+            .mealTimes.filter((mealTime) => mealTime.mealTime !== "Bright Meal") // Exclude "Bright Meal"... what even is that?
+            .map((mealTime) => mealTime.mealTime)
         )
       );
   }, [meals, selectedDiningHall, selectedDay]);
@@ -342,7 +343,7 @@ const useMealPlanner = () => {
   const handleDiningHallChange = useCallback(
     (diningHall) => {
       setSelectedDiningHall(diningHall);
-      localStorage.setItem("selectedDiningHall", diningHall)
+      localStorage.setItem("selectedDiningHall", diningHall);
       setSelectedDay("");
       localStorage.setItem("selectedDay", "");
       setSelectedMealTime("");
