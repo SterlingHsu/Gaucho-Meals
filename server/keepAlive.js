@@ -6,23 +6,10 @@ let tick = 0;
 function keepAlive() {
   axios
     .get(BACKEND_URL)
-    .then((response) => {
-      // Log keep-alive ping once an hour
+    .then()
+    .catch(() => {
       if (tick >= 120) {
-        console.log(
-          `Keep-alive ping at ${new Date().toISOString()}: Status Code ${
-            response.status
-          }`
-        );
-        tick = 0;
-      }
-    })
-    .catch((error) => {
-      if (tick >= 120) {
-        console.error(
-          `Error pinging at ${new Date().toISOString()}:`,
-          error.message
-        );
+        console.log(`Server pinged at ${new Date().toISOString()}:`);
         tick = 0;
       }
     });
