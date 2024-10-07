@@ -247,15 +247,25 @@ def getMenuItemsByDiningHall(dining_hall, get_most_recent_only=True):
 def getMenu(get_most_recent_only=True):
     dining_halls = ["Takeout at Ortega Commons", "De La Guerra Dining Commons", "Carrillo Dining Commons", "Portola Dining Commons"]
     menu = {}
-    
+    max_retries = 3
+    base_delay = 2
+
     for dining_hall in dining_halls:
-        try:
-            print("Retrieving for", dining_hall)
-            menu[dining_hall] = getMenuItemsByDiningHall(dining_hall, get_most_recent_only)
-            print("Retrieved for", dining_hall)
-        except Exception as e:
-            print("Retrieval unsuccessful. Error:", e)
-    
+        retries = 0
+        while retries < max_retries:
+            try:
+                print("Retrieving for", dining_hall)
+                menu[dining_hall] = getMenuItemsByDiningHall(dining_hall, get_most_recent_only)
+                print("Retrieved for", dining_hall)
+                break
+            except Exception as e:                
+                retries += 1
+                if retries == max_retries:
+                    print(f"Retrieval unsuccessful after a max {max_retries} attempts for {dining_hall}")
+                else:
+                    delay = base_delay * (2 ** (retries - 1))  # Exponential backoff
+                    print(f"Retrieval attempt {retries} failed. Retrying in {delay} seconds...")
+                    time.sleep(delay)
     setPrimaryItems(menu)
     
     return menu
