@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const keepAlive = require("./keepAlive");
+const { keepAlive, cleanUpOutdatedMeals } = require("./utilities");
 require("dotenv").config();
 
 const app = express();
@@ -46,3 +46,5 @@ app.listen(PORT, () => {
   console.log(`Connected! Running on ${PORT}`);
   if (process.env.NODE_ENV) setInterval(keepAlive, 30000);
 });
+
+cleanUpOutdatedMeals();
