@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const cron = require("node-cron");
 const { keepAlive, cleanUpOutdatedMeals } = require("./utilities");
 require("dotenv").config();
 
@@ -47,4 +48,7 @@ app.listen(PORT, () => {
   if (process.env.NODE_ENV) setInterval(keepAlive, 30000);
 });
 
-cleanUpOutdatedMeals();
+cron.schedule("0 0 * * *", () => {
+  console.log("Running scheduled cleanup...");
+  cleanUpOutdatedMeals();
+});
