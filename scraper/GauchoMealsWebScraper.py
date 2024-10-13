@@ -471,17 +471,6 @@ def daily_update_db(data):
             )
             
         elif doc and "days" in doc and len(doc["days"]) > 0:
-            day = doc["days"][0]["day"]
-            result = meals_collection.update_one(
-                {"_id": doc["_id"]},
-                {"$pop": {"days": -1}}
-            )
-            
-            if result.modified_count > 0:
-                print(f"Successfully removed the first day, {day} from {dining_hall}")
-            else:
-                print(f"No update was made for {dining_hall}. The document may not exist or may have an empty days array.")
-            
             formatted_day, day = format_new_day(new_day_data)
             
             meals_collection.update_one(
