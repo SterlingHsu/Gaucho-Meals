@@ -25,7 +25,7 @@ async function cleanUpOutdatedMeals() {
     console.log(`Today's date: ${todayISOString}`);
 
     const result = await Meal.updateMany(
-      { diningHall: { $ne: "Take Out at Ortega Commons" } },
+      { diningHall: { $ne: "Takeout at Ortega Commons" } },
       [
         {
           $set: {

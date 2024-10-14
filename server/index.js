@@ -48,7 +48,7 @@ app.listen(PORT, () => {
   if (process.env.NODE_ENV) setInterval(keepAlive, 30000);
 });
 
-cron.schedule("0 20 * * *", () => {
+cron.schedule("0 0 * * *", () => {
   console.log("Running scheduled cleanup...");
   cleanUpOutdatedMeals();
 });
