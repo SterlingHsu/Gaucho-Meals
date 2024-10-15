@@ -124,17 +124,21 @@ const useMealPlanner = () => {
     else if (selectedDiningHall === "Takeout at Ortega Commons")
       return ["Breakfast", "Lunch", "Dinner"];
     else {
-      const oldestDay = meals.find(
+      const oldestDayRaw = meals.find(
         (meal) => meal.diningHall === selectedDiningHall
       ).days[0].day;
-      const today = new Date();
+      const oldestDay = new Date(oldestDayRaw);
 
-      if (today < oldestDay) setSelectedDay(oldestDay);
+      const currentSelectedDay = new Date(selectedDay);
+
+      const dayToUse =
+        currentSelectedDay < oldestDay ? oldestDayRaw : selectedDay;
+
       return Array.from(
         new Set(
           meals
             .find((meal) => meal.diningHall === selectedDiningHall)
-            .days.find((day) => day.day === selectedDay)
+            .days.find((day) => day.day === dayToUse)
             .mealTimes.filter((mealTime) => mealTime.mealTime !== "Bright Meal") // Exclude "Bright Meal"... what even is that?
             .map((mealTime) => mealTime.mealTime)
         )
