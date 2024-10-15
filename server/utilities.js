@@ -1,5 +1,6 @@
 const axios = require("axios");
 const Meal = require("./models/Meal");
+const Users = require("./models/Users")
 require("dotenv").config();
 
 const BACKEND_URL = process.env.BACKEND_URL;
