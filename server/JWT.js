@@ -4,7 +4,7 @@ require("dotenv").config();
 const secret = process.env.secret;
 
 const createTokens = (user) => {
-  const accessToken = sign({ _id: user._id }, secret);
+  const accessToken = sign({ _id: user._id }, secret, {});
 
   return accessToken;
 };
