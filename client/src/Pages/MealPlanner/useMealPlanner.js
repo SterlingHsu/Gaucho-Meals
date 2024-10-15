@@ -123,7 +123,13 @@ const useMealPlanner = () => {
     if (!selectedDiningHall || !selectedDay) return [];
     else if (selectedDiningHall === "Takeout at Ortega Commons")
       return ["Breakfast", "Lunch", "Dinner"];
-    else
+    else {
+      const oldestDay = meals.find(
+        (meal) => meal.diningHall === selectedDiningHall
+      ).days[0].day;
+      const today = new Date();
+
+      if (today < oldestDay) setSelectedDay(oldestDay);
       return Array.from(
         new Set(
           meals
@@ -133,6 +139,7 @@ const useMealPlanner = () => {
             .map((mealTime) => mealTime.mealTime)
         )
       );
+    }
   }, [meals, selectedDiningHall, selectedDay]);
 
   const addItemToCalculator = useCallback(
