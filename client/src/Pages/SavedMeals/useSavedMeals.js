@@ -2,7 +2,10 @@ import { useState, useEffect, useCallback } from "react";
 import axios from "axios";
 
 export const useSavedMeals = () => {
-  const [savedMeals, setSavedMeals] = useState([]);
+  const [savedMeals, setSavedMeals] = useState(() => {
+    const storedSavedMeals = localStorage.getItem("savedMeals");
+    return storedSavedMeals ? JSON.parse(storedSavedMeals) : [];
+  });
   const [loading, setLoading] = useState(true);
 
   const apiUrl = process.env.REACT_APP_API_URL;
@@ -16,6 +19,7 @@ export const useSavedMeals = () => {
       const savedMeals = response.data.plannedMeals;
 
       setSavedMeals(savedMeals);
+      localStorage.setItem("storedSavedMeals", JSON.stringify(savedMeals));
     } catch (err) {
       console.error("Error fetching saved meals:", err);
     }

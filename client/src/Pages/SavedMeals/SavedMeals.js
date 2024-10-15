@@ -117,7 +117,9 @@ const SavedMeals = () => {
     <>
       <Navbar />
       <div className="container-fluid px-5 mt-3">
-        <h2 className="fw-bold mb-3">Planned Meals</h2>
+        <h2 style={{ display: "inline", marginRight: "15px" }} className="fw-bold mb-3">
+          Planned Meals
+        </h2>
         {loading ? (
           <span style={{ fontStyle: "italic" }}>Updating data...</span>
         ) : savedMeals.length === 0 ? (
