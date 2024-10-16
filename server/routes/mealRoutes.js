@@ -80,12 +80,13 @@ router.post("/save-meal", validateToken, async (req, res) => {
 
 router.get("/primary-items", async (req, res) => {
   try {
-    const currentDate = new Date().toLocaleDateString("en-US", {
+    const currentDate = new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-    });
+      timeZone: "America/Los_Angeles",
+    }).format(new Date());
 
     const primaryItems = await Meal.aggregate([
       { $unwind: "$days" },

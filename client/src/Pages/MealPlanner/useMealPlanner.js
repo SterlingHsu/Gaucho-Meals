@@ -100,7 +100,11 @@ const useMealPlanner = () => {
   }, [meals]);
 
   const getDays = useMemo(() => {
-    if (!selectedDiningHall) return [];
+    if (
+      !selectedDiningHall ||
+      !meals.find((meal) => meal.diningHall === selectedDiningHall)
+    )
+      return [];
     else if (selectedDiningHall === "Takeout at Ortega Commons")
       return Array.from(
         new Set(
