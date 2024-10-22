@@ -80,17 +80,21 @@ router.post("/save-meal", validateToken, async (req, res) => {
 
 router.get("/primary-items", async (req, res) => {
   try {
-    const currentDate = new Intl.DateTimeFormat("en-US", {
+    const todayDate = new Date().toLocaleString("en-US", {
+      timeZone: "America/Los_Angeles",
+    });
+    let targetDate = new Intl.DateTimeFormat("en-US", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
       timeZone: "America/Los_Angeles",
-    }).format(new Date());
+    }).format(new Date(todayDate));
 
-    const primaryItems = await Meal.aggregate([
+    // First try to get meals for current date
+    let primaryItems = await Meal.aggregate([
       { $unwind: "$days" },
-      { $match: { $or: [{ "days.day": currentDate }, { "days.day": "" }] } },
+      { $match: { $or: [{ "days.day": targetDate }, { "days.day": "" }] } },
       { $unwind: "$days.mealTimes" },
       {
         $project: {
@@ -102,7 +106,38 @@ router.get("/primary-items", async (req, res) => {
       },
     ]);
 
-    res.json({ primaryItems: primaryItems });
+    // If only Ortega found for current date (because today's meals were removed @ 9pm PST), get the next day
+    if (primaryItems.length === 1) {
+      const nextDay = new Date(todayDate);
+      nextDay.setDate(nextDay.getDate() + 1);
+
+      targetDate = new Intl.DateTimeFormat("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        timeZone: "America/Los_Angeles",
+      }).format(nextDay);
+
+      primaryItems = await Meal.aggregate([
+        { $unwind: "$days" },
+        { $match: { $or: [{ "days.day": targetDate }, { "days.day": "" }] } },
+        { $unwind: "$days.mealTimes" },
+        {
+          $project: {
+            _id: 0,
+            diningHall: 1,
+            mealTime: "$days.mealTimes.mealTime",
+            primaryItems: "$days.mealTimes.primaryItems",
+          },
+        },
+      ]);
+    }
+
+    res.json({
+      primaryItems: primaryItems,
+      date: targetDate,
+    });
   } catch (error) {
     console.error("Error fetching primary items:", error);
     res.status(500).json({ error: "Internal server error" });

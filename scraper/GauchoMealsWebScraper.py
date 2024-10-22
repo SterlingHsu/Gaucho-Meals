@@ -139,6 +139,7 @@ def getMenuItemsByCategory(driver):
             menu_item = next_tr.find("a").get_text().strip()
             menu_item_link_element = wait.until(EC.presence_of_element_located((By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")))
             if menu_item_link_element:
+                time.sleep(1)
                 menu_item_link_element.click()
                 nutritional_info = getMenuItemInfo(driver)
                 items_in_category.append(nutritional_info)
