@@ -72,7 +72,7 @@ const useMealPlanner = () => {
     );
     if (!hallMeals) return [];
 
-    if (selectedDiningHall === "Takeout at Ortega Commons") {
+    if (selectedDiningHall === "Takeout at Ortega") {
       return hallMeals.days[0].mealTimes[0].categories.filter(
         (category) => category.category !== "Primary Items"
       );
@@ -105,11 +105,11 @@ const useMealPlanner = () => {
       !meals.find((meal) => meal.diningHall === selectedDiningHall)
     )
       return [];
-    else if (selectedDiningHall === "Takeout at Ortega Commons")
+    else if (selectedDiningHall === "Takeout at Ortega")
       return Array.from(
         new Set(
           meals
-            .find((meal) => meal.diningHall === "De La Guerra Dining Commons")
+            .find((meal) => meal.diningHall === "De La Guerra")
             .days.map((day) => day.day)
         )
       );
@@ -125,7 +125,7 @@ const useMealPlanner = () => {
 
   const getMealTimes = useMemo(() => {
     if (!selectedDiningHall || !selectedDay) return [];
-    else if (selectedDiningHall === "Takeout at Ortega Commons")
+    else if (selectedDiningHall === "Takeout at Ortega")
       return ["Breakfast", "Lunch", "Dinner"];
     else {
       const oldestDayRaw = meals.find(

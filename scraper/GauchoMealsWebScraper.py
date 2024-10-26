@@ -163,6 +163,10 @@ def getMenuItemsByDay(driver, get_most_recent_only=True):
         date_element = most_recent_day.find_element(By.CSS_SELECTOR, '.card-title.h4')
         date = date_element.text.strip()
         
+        # Remove the year from the date string
+        date_parts = date.split(',')
+        date = f"{date_parts[0]}, {date_parts[1].strip()}"
+
         meal_links = most_recent_day.find_elements(By.CSS_SELECTOR, '.cbo_nn_menuLink')
         
         menuItemsByMeal = {}
@@ -189,6 +193,10 @@ def getMenuItemsByDay(driver, get_most_recent_only=True):
 
             date_element = day.find_element(By.CSS_SELECTOR, '.card-title.h4')
             date = date_element.text.strip()
+
+            # Remove the year from the date string
+            date_parts = date.split(',')
+            date = f"{date_parts[0]}, {date_parts[1].strip()}"
 
             # Find all meal links within the day
             meal_links = day.find_elements(By.CSS_SELECTOR, '.cbo_nn_menuLink')
@@ -256,7 +264,8 @@ def getMenu(get_most_recent_only=True):
         while retries < max_retries:
             try:
                 print("Retrieving for", dining_hall)
-                menu[dining_hall] = getMenuItemsByDiningHall(dining_hall, get_most_recent_only)
+                dining_hall_converted = convertDiningHallName(dining_hall)
+                menu[dining_hall_converted] = getMenuItemsByDiningHall(dining_hall, get_most_recent_only)
                 print("Retrieved for", dining_hall)
                 break
             except Exception as e:                
@@ -270,6 +279,16 @@ def getMenu(get_most_recent_only=True):
     setPrimaryItems(menu)
     
     return menu
+
+def convertDiningHallName(dining_hall):
+    conversions = {
+        "Takeout at Ortega Commons": "Takeout at Ortega", 
+        "De La Guerra Dining Commons": "De La Guerra",
+        "Carrillo Dining Commons" : "Carrillo", 
+        "Portola Dining Commons" : "Portola"
+        }
+    
+    return conversions[dining_hall]
 
 def format_dish_with_emoji(dish_name):
     keyword_emoji_map = {
@@ -340,7 +359,7 @@ def format_dish_with_emoji(dish_name):
 
 def setPrimaryItems(menu):
     for dining_common_name, dining_common_data in menu.items():
-        if dining_common_name != "Takeout at Ortega Commons":
+        if dining_common_name != "Takeout at Ortega":
             for date, meals in dining_common_data.items():
                 for meal, categories in meals.items():
                     primary_items = []
@@ -360,13 +379,13 @@ def setPrimaryItems(menu):
                     for item in items:
                         primary_items.append(format_dish_with_emoji(item['Item']))
 
-            menu["Takeout at Ortega Commons"]['Primary Items'] = primary_items          
+            menu["Takeout at Ortega"]['Primary Items'] = primary_items          
     
     return menu
 
 def printMenu(menu):
     for dining_common_name, dining_common_data in menu.items():
-        if dining_common_name != "Takeout at Ortega Commons":
+        if dining_common_name != "Takeout at Ortega":
             print("Name of Dining Common:", dining_common_name)
             for date, meals in dining_common_data.items():
                 print("\nMeals for", date)
@@ -389,8 +408,8 @@ def save_to_db(data):
     meals_collection.delete_many({})  # Clear the collection
 
     for hall, days in data.items():
-        if hall == "Takeout at Ortega Commons":
-            hall_doc = {"diningHall": "Takeout at Ortega Commons", "days": []}
+        if hall == "Takeout at Ortega":
+            hall_doc = {"diningHall": "Takeout at Ortega", "days": []}
             day_doc = {"day": "", "mealTimes": []}
             meal_time_doc = {"mealTime": "", "categories": []}
             
@@ -453,7 +472,7 @@ def daily_update_db(data):
     
     for dining_hall, new_day_data in data.items():
         doc = meals_collection.find_one({"diningHall": dining_hall})
-        if dining_hall == "Takeout at Ortega Commons":
+        if dining_hall == "Takeout at Ortega":
             result = meals_collection.update_one(
                 {"_id": doc["_id"]},
                 {"$set": {"days": []}}
