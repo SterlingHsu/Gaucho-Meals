@@ -11,6 +11,14 @@ const Home = () => {
 
   const apiUrl = process.env.REACT_APP_API_URL;
 
+  const today = new Date();
+  const todayFormatted = new Intl.DateTimeFormat("en-US", {
+    weekday: "long",
+    month: "long",
+    day: "numeric",
+    timeZone: "America/Los_Angeles",
+  }).format(today);
+
   const fetchPrimaryItems = useCallback(async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/meals/primary-items`, {
@@ -54,7 +62,10 @@ const Home = () => {
     <>
       <div className="d-flex flex-column min-vh-100 overflow-hidden">
         <Navbar />
-        <div className="flex-grow-1 d-flex align-items-center justify-content-center p-3 overflow-auto">
+        <div className="container mt-4">
+          <div className="today-date h3 fw-bold">Menu for {todayFormatted}</div>
+        </div>
+        <div className="flex-grow-1 d-flex align-items-center justify-content-center px-3 pb-3 overflow-auto">
           <div className="container mt-4">
             <div className="row">
               {groupedPrimaryItems &&
@@ -93,6 +104,15 @@ const Home = () => {
           </div>
         </div>
       </div>
+      <style>
+        {`
+        @media (max-width: 767px) {
+          .today-date {
+            margin-left: 1rem
+          }
+        }
+        `}
+      </style>
     </>
   );
 };

@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "../../Components/Navbar.js";
 import { useSavedMeals } from "./useSavedMeals";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTrashCan } from "@fortawesome/free-solid-svg-icons";
+import { faTrashCan, faPencil } from "@fortawesome/free-solid-svg-icons";
 import mapachesad from "../../Static/img/mapachesad.png";
 
 const SavedMeals = () => {
@@ -14,7 +14,6 @@ const SavedMeals = () => {
     weekday: "long",
     month: "long",
     day: "numeric",
-    year: "numeric",
   });
 
   const groupMealsByDate = (savedMeals) => {
@@ -97,18 +96,18 @@ const SavedMeals = () => {
 
   const DailyNutritionSummary = ({ nutrition }) => (
     <div className="daily-nutrition-summary">
-      <span className="text-muted me-2">Total:</span>
-      <span className="badge bg-primary me-1">
-        {nutrition.dailyCalories.toFixed(0)} Cal
+      <span className="text-muted me-1">Total:</span>
+      <span className="nutrition-badge calories">
+        {nutrition.dailyCalories.toFixed(0)} Calories |
       </span>
-      <span className="badge bg-success me-1">
-        {nutrition.dailyProtein.toFixed(0)}g Pro
+      <span className="nutrition-badge protein">
+        {nutrition.dailyProtein.toFixed(0)}g Protein |
       </span>
-      <span className="badge bg-warning me-1">
-        {nutrition.dailyFat.toFixed(0)}g Fat
+      <span className="nutrition-badge fat">
+        {nutrition.dailyFat.toFixed(0)}g Fats |
       </span>
-      <span className="badge bg-info">
-        {nutrition.dailyCarbs.toFixed(0)}g Carb
+      <span className="nutrition-badge carbs">
+        {nutrition.dailyCarbs.toFixed(0)}g Carbs
       </span>
     </div>
   );
@@ -116,94 +115,92 @@ const SavedMeals = () => {
   return (
     <>
       <Navbar />
-      <div className="container-fluid px-5 mt-3">
-        <h2 style={{ display: "inline", marginRight: "15px" }} className="fw-bold mb-3">
-          Planned Meals
-        </h2>
-        {loading ? (
-          <span style={{ fontStyle: "italic" }}>Updating data...</span>
-        ) : savedMeals.length === 0 ? (
-          <div className="text-center">
-            <img
-              src={mapachesad}
-              alt="Sad Mapache"
-              className="img-fluid"
-              style={{ maxWidth: "100%", height: "auto", maxHeight: "100%" }}
-            />
-            <h1>No meals planned yet!</h1>
+      <div className="container-fluid py-4 px-4">
+        {!loading && savedMeals.length === 0 ? (
+          <div className="text-center py-5">
+            <div className="empty-state-container">
+              <img
+                src={mapachesad}
+                alt="Sad Mapache"
+                className="empty-state-image mb-4"
+              />
+              <h3 className="fw-bold text-muted">No meals planned yet!</h3>
+              <p className="text-muted">
+                Start planning your meals to see them here.
+              </p>
+            </div>
           </div>
         ) : (
           dates.map((date) => (
-            <div key={date} className="mb-3">
+            <div key={date} className="meal-date-group mb-4">
               <div
-                className={`d-flex flex-column align-items-md-center mb-2 p-2 ${
-                  date === today ? "bg-light rounded" : ""
-                }`}
+                className={`date-header ${date === today ? "current-day" : ""}`}
               >
-                <h4 className="mb-2 mb-md-0 me-md-3">
-                  {date === today ? `Today - ${date}` : date}
-                </h4>
-                <DailyNutritionSummary
-                  nutrition={calculateDailyNutrition(groupedMeals[date])}
-                />
+                <div className="d-flex flex-column flex-md-row align-items-md-center justify-content-between p-3">
+                  <h4 className="fw-bold m-0 mb-1">
+                    {date === today ? (
+                      <span className="text-primary">Today - {date}</span>
+                    ) : (
+                      date
+                    )}
+                  </h4>
+                  <DailyNutritionSummary
+                    nutrition={calculateDailyNutrition(groupedMeals[date])}
+                  />
+                </div>
               </div>
-              <div className="row row-cols-1 row-cols-md-3 g-4">
+
+              <div className="row g-4 mt-1">
                 {groupedMeals[date].map((meal, mealIndex) => {
                   const { totalCalories, totalProtein, totalFat, totalCarbs } =
                     calculateTotalNutrition(meal.items);
                   return (
-                    <div key={mealIndex} className="col">
-                      <div className="card h-100 shadow">
-                        <div className="card-header d-flex justify-content-between align-items-center py-3">
-                          <span className="mb-0 fw-bold text-black">
-                            {meal.mealTime} at {meal.diningHall}
-                          </span>
-                          <button
-                            className="btn btn-outline-danger btn-sm float-right"
-                            onClick={() => deleteSavedMeal(meal._id)}
-                          >
-                            <FontAwesomeIcon icon={faTrashCan} />
-                          </button>
-                        </div>
-                        <div className="card-body p-2">
-                          <div className="d-flex justify-content-between mb-2 ms-2">
-                            <div className="nutrition-summary">
-                              <span className="text-muted me-2">Total:</span>
-                              <span className="badge bg-primary me-1">
-                                {totalCalories.toFixed(0)} Cal
+                    <div key={mealIndex} className="col-md-6 col-lg-4">
+                      <div className="meal-card">
+                        <div className="meal-card-header">
+                          <div className="d-flex justify-content-between align-items-center">
+                            <h5 className="mb-0 meal-title">
+                              <span className="meal-time">{meal.mealTime}</span>
+                              <span className="text-muted mx-2">·</span>
+                              <span className="dining-hall">
+                                {meal.diningHall}
                               </span>
-                              <span className="badge bg-success me-1">
-                                {totalProtein.toFixed(0)}g Pro
-                              </span>
-                              <span className="badge bg-warning me-1">
-                                {totalFat.toFixed(0)}g Fat
-                              </span>
-                              <span className="badge bg-info">
-                                {totalCarbs.toFixed(0)}g Carb
-                              </span>
+                            </h5>
+                            <div className="meal-actions">
+                              <button
+                                className="btn btn-outline-primary btn-sm me-2"
+                                onClick={() => editMeal(meal)}
+                              >
+                                <FontAwesomeIcon icon={faPencil} />
+                              </button>
+                              <button
+                                className="btn btn-outline-danger btn-sm"
+                                onClick={() => deleteSavedMeal(meal._id)}
+                              >
+                                <FontAwesomeIcon icon={faTrashCan} />
+                              </button>
                             </div>
                           </div>
-                          <ul className="list-group list-group-flush">
-                            {meal.items.map((item, idx) => (
-                              <li
-                                key={idx}
-                                className="list-group-item p-2 py-1 d-flex justify-content-between align-items-center border-0"
-                              >
-                                <span>{item.name}</span>
-                                <span className="badge bg-secondary">
-                                  x {item.quantity || 1}
-                                </span>
-                              </li>
-                            ))}
-                          </ul>
                         </div>
-                        <div className="card-footer bg-transparent border-top-0 text-end">
-                          <button
-                            className="btn btn-outline-primary btn-sm"
-                            onClick={() => editMeal(meal)}
-                          >
-                            Edit Meal
-                          </button>
+
+                        <div className="meal-card-nutrition py-2 px-3">
+                            <small style={{fontWeight: 500}}>
+                              Calories: {totalCalories.toFixed(0)}g | Protein:{" "}
+                              {totalProtein.toFixed(0)}g | Fat:{" "}
+                              {totalFat.toFixed(0)}g | Carbs:{" "}
+                              {totalCarbs.toFixed(0)}g
+                            </small>
+                        </div>
+
+                        <div className="meal-items-list">
+                          {meal.items.map((item, idx) => (
+                            <div key={idx} className="meal-item">
+                              <span>{item.name}</span>
+                              <span className="badge bg-secondary">
+                                × {item.quantity}
+                              </span>
+                            </div>
+                          ))}
                         </div>
                       </div>
                     </div>
@@ -214,26 +211,111 @@ const SavedMeals = () => {
           ))
         )}
       </div>
+
       <style>{`
-        .nutrition-summary .badge,
-        .daily-nutrition-summary .badge {
-          font-size: 0.8rem;
+        .meal-date-group {
+          background: white;
+          border-radius: 8px;
+          overflow: hidden;
         }
-        @media (max-width: 576px) {
-          .card-body {
-            padding: 0.5rem !important;
-          }
-          .nutrition-summary,
-          .daily-nutrition-summary {
-            display: flex;
-            flex-wrap: wrap;
-            align-items: center;
-            gap: 0.25rem;
-          }
-          .nutrition-summary .badge,
-          .daily-nutrition-summary .badge {
-            font-size: 0.7rem;
-          }
+
+        .date-header {
+          background: #f8f9fa;
+          border-bottom: 1px solid #e9ecef;
+        }
+
+        .current-day {
+          background: #e8f4ff;
+        }
+
+        .meal-card {
+          background: white;
+          border: 1px solid #e9ecef;
+          border-radius: 12px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+          transition: transform 0.2s;
+        }
+
+        .meal-card:hover {
+          transform: translateY(-2px);
+        }
+
+        .meal-card-header {
+          padding: 1rem;
+          border-bottom: 1px solid #e9ecef;
+        }
+
+        .meal-title {
+          font-size: 1rem;
+          line-height: 1.4;
+        }
+
+        .meal-time {
+          font-weight: 650;
+          color: #2b3137;
+        }
+
+        .dining-hall {
+          font-size: 0.9rem;
+          color: #6c757d;
+        }
+
+        .meal-items-list {
+          padding: 0 1rem 0.75rem;
+        }
+
+        .meal-item {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding: 0.4rem 0;
+          font-size: 0.9rem;
+          color: #495057;
+        }
+
+        .nutrition-badges {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 0.5rem;
+        }
+
+        .nutrition-badge {
+          padding: 0.25rem;
+          border-radius: 6px;
+          font-size: .9rem;
+          font-weight: 500;
+        }
+
+        // .nutrition-badge.calories {
+        //   background: rgba(13, 110, 253, 0.1);
+        //   color: rgb(13, 110, 253);
+        // }
+
+        // .nutrition-badge.protein {
+        //   background: rgba(220, 53, 69, 0.1);
+        //   color: rgb(220, 53, 69);
+        // }
+
+        // .nutrition-badge.fat {
+        //   background: rgba(255, 193, 7, 0.1);
+        //   color: rgb(255, 193, 7);
+        // }
+
+        // .nutrition-badge.carbs {
+        //   background: rgba(25, 135, 84, 0.1);
+        //   color: rgb(25, 135, 84);
+        // }
+
+        .empty-state-container {
+          max-width: 400px;
+          margin: 0 auto;
+          padding: 2rem;
+        }
+
+        .empty-state-image {
+          max-width: 200px;
+          height: auto;
+          opacity: 0.8;
         }
       `}</style>
     </>

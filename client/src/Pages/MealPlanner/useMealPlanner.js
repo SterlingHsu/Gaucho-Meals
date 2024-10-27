@@ -2,7 +2,6 @@ import { useState, useEffect, useMemo, useCallback } from "react";
 import axios from "axios";
 
 const useMealPlanner = () => {
-  const [loading, setLoading] = useState(true);
   const [meals, setMeals] = useState(() => {
     const storedMeals = localStorage.getItem("meals");
     return storedMeals ? JSON.parse(storedMeals) : [];
@@ -56,8 +55,6 @@ const useMealPlanner = () => {
         localStorage.setItem("meals", JSON.stringify(response.data));
       } catch (error) {
         console.error("Error fetching meals:", error);
-      } finally {
-        setLoading(false);
       }
     };
     fetchMeals();
@@ -413,7 +410,6 @@ const useMealPlanner = () => {
   );
 
   return {
-    loading,
     meals,
     setMeals,
     selectedItems,

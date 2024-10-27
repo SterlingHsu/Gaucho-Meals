@@ -5,6 +5,7 @@ import {
   faThumbsUp,
   faThumbsDown,
   faHeart,
+  faPlus,
 } from "@fortawesome/free-solid-svg-icons";
 
 const MenuItems = ({
@@ -124,6 +125,17 @@ const MenuItems = ({
           padding-left: 15px;
           background-clip: padding-box;
         }
+        
+        .menu-items-container .card {
+          background: white;
+          border-radius: 12px;
+          box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+          transition: transform 0.2s;
+        }
+
+        .menu-items-container .card:hover {
+          transform: translateY(-2px);
+        }
 
         .floating-plus {
           position: fixed;
@@ -142,24 +154,6 @@ const MenuItems = ({
           100% {
             transform: translateY(-35px);
             opacity: 0;
-          }
-        }
-
-        @media (max-width: 992px) {
-          .my-masonry-grid {
-            margin-left: -10px;
-          }
-          .my-masonry-grid_column {
-            padding-left: 10px;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .my-masonry-grid {
-            margin-left: 0;
-          }
-          .my-masonry-grid_column {
-            padding-left: 0;
           }
         }
       `}</style>
@@ -188,69 +182,71 @@ const MenuItems = ({
             <div key={index} className="mb-4">
               <h4 className="mb-3">{category.category}</h4>
               {category.items.filter(filterItemsByPreferences).map((item) => (
-                <div key={item.name} className="card mb-3 shadow-sm">
-                  <div className="card-body">
-                    <div className="d-flex justify-content-between align-items-center mb-2">
-                      <h5 className="card-title mb-0">
-                        {item.netRating > 30 && (
-                          <FontAwesomeIcon
-                            icon={faHeart}
-                            className="text-danger me-2"
-                          />
-                        )}
-                        {item.netRating < -30 && (
-                          <FontAwesomeIcon
-                            icon={faThumbsDown}
-                            className="text-primary me-2"
-                          />
-                        )}
-                        {item.name}
-                      </h5>
-                      <div className="d-flex align-items-center vote-container">
-                        <button
-                          className={`btn btn-sm mx-1 vote-up ${getButtonClass(
-                            item._id,
-                            true
-                          )}`}
-                          onClick={(e) => toggleVote(e, item._id)}
-                        >
-                          <FontAwesomeIcon icon={faThumbsUp} />
-                        </button>
-                        <button
-                          className={`btn btn-sm mx-1 vote-down ${getButtonClass(
-                            item._id,
-                            false
-                          )}`}
-                          onClick={(e) => toggleVote(e, item._id)}
-                        >
-                          <FontAwesomeIcon icon={faThumbsDown} />
-                        </button>
+                <div className="menu-items-container">
+                  <div key={item.name} className="card mb-3 shadow-sm">
+                    <div className="card-body">
+                      <div className="d-flex justify-content-between align-items-center mb-2">
+                        <h5 className="card-title mb-0">
+                          {item.netRating > 30 && (
+                            <FontAwesomeIcon
+                              icon={faHeart}
+                              className="text-danger me-2"
+                            />
+                          )}
+                          {item.netRating < -30 && (
+                            <FontAwesomeIcon
+                              icon={faThumbsDown}
+                              className="text-primary me-2"
+                            />
+                          )}
+                          {item.name}
+                        </h5>
+                        <div className="d-flex align-items-center vote-container">
+                          <button
+                            className={`btn btn-sm mx-1 vote-up ${getButtonClass(
+                              item._id,
+                              true
+                            )}`}
+                            onClick={(e) => toggleVote(e, item._id)}
+                          >
+                            <FontAwesomeIcon icon={faThumbsUp} />
+                          </button>
+                          <button
+                            className={`btn btn-sm mx-1 vote-down ${getButtonClass(
+                              item._id,
+                              false
+                            )}`}
+                            onClick={(e) => toggleVote(e, item._id)}
+                          >
+                            <FontAwesomeIcon icon={faThumbsDown} />
+                          </button>
+                        </div>
                       </div>
+                      <p className="card-text">
+                        <small>
+                          Calories: {item.nutritionalInfo.Calories} | Protein:{" "}
+                          {item.nutritionalInfo.Protein} | Fat:{" "}
+                          {item.nutritionalInfo["Total Fat"]} | Carbs:{" "}
+                          {item.nutritionalInfo["Total Carbohydrate"]}
+                        </small>
+                      </p>
+                      {!isMealSaved && (
+                        <div className="d-flex justify-content-between align-items-center mt-2">
+                          <button
+                            className="btn btn-outline-secondary btn-sm"
+                            onClick={() => showIngredients(item)}
+                          >
+                            View Ingredients
+                          </button>
+                          <button
+                            className="btn btn-primary btn-sm"
+                            onClick={(e) => handleAddItem(item, e)}
+                          >
+                            <FontAwesomeIcon icon={faPlus} size="xl" />
+                          </button>
+                        </div>
+                      )}
                     </div>
-                    <p className="card-text">
-                      <small>
-                        Calories: {item.nutritionalInfo.Calories} | Protein:{" "}
-                        {item.nutritionalInfo.Protein} | Fat:{" "}
-                        {item.nutritionalInfo["Total Fat"]} | Carbs:{" "}
-                        {item.nutritionalInfo["Total Carbohydrate"]}
-                      </small>
-                    </p>
-                    {!isMealSaved && (
-                      <div className="d-flex justify-content-between align-items-center mt-2">
-                        <button
-                          className="btn btn-outline-secondary btn-sm"
-                          onClick={() => showIngredients(item)}
-                        >
-                          View Ingredients
-                        </button>
-                        <button
-                          className="btn btn-primary btn-sm"
-                          onClick={(e) => handleAddItem(item, e)}
-                        >
-                          Add
-                        </button>
-                      </div>
-                    )}
                   </div>
                 </div>
               ))}

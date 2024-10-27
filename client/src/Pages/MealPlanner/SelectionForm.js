@@ -12,7 +12,7 @@ const SelectionForm = ({
   getMealTimes,
 }) => {
   return (
-    <div className="container mt-3 pb-4">
+    <div className="container pb-4">
       <div className="row g-3 align-items-end">
         <div className="col-md-4">
           <label htmlFor="diningHallSelect" className="form-label fw-bold">

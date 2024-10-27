@@ -125,6 +125,15 @@ def processIngredients(ingredients):
     return results
 
 def getMenuItemsByCategory(driver):
+    driver.execute_script("""
+        var nav = document.querySelector('[aria-label="Header Navigation"]');
+        if(nav) {
+            nav.style.display = 'none';
+            return true;
+        }
+        return false;
+    """)
+    
     wait = WebDriverWait(driver, 10)
     wait.until(EC.presence_of_element_located((By.CLASS_NAME, "cbo_nn_itemGroupRow")))
     html = driver.page_source
@@ -139,7 +148,6 @@ def getMenuItemsByCategory(driver):
             menu_item = next_tr.find("a").get_text().strip()
             menu_item_link_element = wait.until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")))
             if menu_item_link_element:
-                time.sleep(1)
                 menu_item_link_element.click()
                 nutritional_info = getMenuItemInfo(driver)
                 items_in_category.append(nutritional_info)
@@ -218,6 +226,107 @@ def getMenuItemsByDay(driver, get_most_recent_only=True):
 
             menuItemsByDay[date] = menuItemsByMeal
     return menuItemsByDay
+
+def get_category_priority(dining_hall, meal_period, category):
+    priority_maps = {
+        "carrillo": {
+            "brunch": {
+                "euro": 0,
+                "grill (cafe)": 1,
+                "deli": 2,
+                "salads": 3,
+                "bakery": 4
+            },
+            "lunch": {
+                "euro": 0,
+                "mongolian grill": 1,
+                "grill (cafe)": 2,
+                "pizza": 3,
+                "deli": 4,
+                "salads": 5,
+                "bakery": 6
+            },
+            "dinner": {
+                "euro": 0,
+                "mongolian grill": 1,
+                "pasta": 2,
+                "pizza": 3,
+                "salads": 4,
+                "deli": 5,
+                "bakery": 6
+            }
+        },
+        "portola": {
+            "breakfast": {
+                "the grill": 0,
+                "greens & grains": 1,
+                "bakery": 2
+            },
+            "brunch": {
+                "chef's choice": 0,
+                "the grill": 1,
+                "the brick": 2,
+                "greens & grains": 3,
+                "bakery": 4
+            },
+            "lunch": {
+                "chef's choice": 0,
+                "international": 1,
+                "the grill": 2,
+                "the brick": 3,
+                "greens & grains": 4,
+                "bakery": 5
+            },
+            "dinner": {
+                "chef's choice": 0,
+                "international": 1,
+                "the brick": 2,
+                "greens & grains": 3,
+                "bakery": 4
+            }
+        }
+    }
+    
+    dining_hall = dining_hall.lower()
+    meal_period = meal_period.lower()
+    category = category.lower()
+    
+    # Return default priority (999) for dining halls that don't need sorting
+    if dining_hall in ["takeout at ortega", "de la guerra"]:
+        return 999
+        
+    # Get priority map for this dining hall and meal period
+    if dining_hall in priority_maps and meal_period in priority_maps[dining_hall]:
+        priorities = priority_maps[dining_hall][meal_period]
+        # Return priority if category exists, otherwise return high number
+        return priorities.get(category, 1000)
+    
+    # Default priority for unknown combinations
+    return 1000
+
+def sort_menu_categories(menu):
+    sorted_menu = {}
+    
+    for dining_hall, days in menu.items():
+        sorted_menu[dining_hall] = {}
+        
+        for date, meals in days.items():
+            sorted_menu[dining_hall][date] = {}
+            
+            for meal_period, categories in meals.items():
+                # Convert categories dict to list of (category, items) tuples for sorting
+                category_items = list(categories.items())
+                
+                # Sort categories based on priority
+                sorted_categories = sorted(
+                    category_items,
+                    key=lambda x: get_category_priority(dining_hall, meal_period, x[0])
+                )
+                
+                # Convert back to dictionary preserving the new order
+                sorted_menu[dining_hall][date][meal_period] = dict(sorted_categories)
+    
+    return sorted_menu
 
 def click_with_retry(driver, xpath, retries=3, delay=1):
     for attempt in range(retries):
@@ -380,6 +489,10 @@ def setPrimaryItems(menu):
                         primary_items.append(format_dish_with_emoji(item['Item']))
 
             menu["Takeout at Ortega"]['Primary Items'] = primary_items          
+    
+    sorted_menu = sort_menu_categories(menu)
+    menu.clear()
+    menu.update(sorted_menu)
     
     return menu
 

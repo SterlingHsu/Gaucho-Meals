@@ -9,19 +9,11 @@ import { useLocation } from "react-router-dom";
 
 const MealPlanner = () => {
   const {
-    loading,
-    // meals,
-    // setMeals,
     selectedItems,
-    // setSelectedItems,
     selectedDiningHall,
-    // setSelectedDiningHall,
     selectedDay,
-    // setSelectedDay,
     selectedMealTime,
-    // setSelectedMealTime,
     isMealSaved,
-    // setIsMealSaved,
     selectedIngredients,
     setSelectedIngredients,
     stickyTop,
@@ -93,12 +85,6 @@ const MealPlanner = () => {
       <div className="container-fluid mt-4 px-5">
         <div className="row">
           <div className="col-md-9">
-            <h2 style={{ display: "inline", marginRight: "15px" }}>
-              Meal Planner
-            </h2>
-            {loading && (
-              <span style={{ fontStyle: "italic" }}>Updating data...</span>
-            )}
             <SelectionForm
               selectedDiningHall={selectedDiningHall}
               selectedDay={selectedDay}
@@ -137,7 +123,6 @@ const MealPlanner = () => {
                 transition: "top 0.1s ease",
               }}
             >
-              <h2>Meal Calculator</h2>
               <MealCalculator
                 selectedItems={selectedItems}
                 removeItemFromCalculator={removeItemFromCalculator}

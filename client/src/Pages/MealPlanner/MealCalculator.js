@@ -51,7 +51,7 @@ const MealCalculator = ({
             >
               <span>
                 {item.name}{" "}
-                <span className="badge bg-secondary rounded-pill">
+                <span className="badge bg-secondary">
                   x {item.quantity}
                 </span>
               </span>
@@ -67,8 +67,8 @@ const MealCalculator = ({
           ))}
         </ul>
 
-        <h5 className="card-title mb-3">Nutritional Info</h5>
-        <ul className="list-group list-group-flush mb-4">
+        <h5 className="card-title mb-1">Nutritional Info</h5>
+        <ul className="list-group list-group-flush mb-2">
           <li className="list-group-item d-flex justify-content-between">
             <span>Calories:</span>
             <strong>{totalCalories.toFixed(0)}</strong>
