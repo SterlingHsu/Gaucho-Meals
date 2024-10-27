@@ -21,14 +21,27 @@ function keepAlive() {
 async function cleanUpOutdatedMeals() {
   try {
     const today = new Date();
-    const todayISOString = today.toISOString().split("T")[0]; // Format: YYYY-MM-DD
+    const todayFormatted = new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      timeZone: "America/Los_Angeles",
+    }).format(today);
+
     const sevenDaysAgo = new Date(today.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const sevenDaysAgoFormatted = new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      timeZone: "America/Los_Angeles",
+    }).format(sevenDaysAgo);
 
-    console.log(`Today's date: ${todayISOString}`);
-    console.log(`Cleaning up meals older than: ${sevenDaysAgo.toISOString()}`);
+    console.log(`Today's date: ${todayFormatted}`);
+    console.log(`Cleaning up meals older than: ${sevenDaysAgoFormatted}`);
 
-    const result = await Meal.updateMany(
-      { diningHall: { $ne: "Takeout at Ortega Commons" } },
+    // Update meal records to remove days older than today in the new format
+    const mealResult = await Meal.updateMany(
+      { diningHall: { $ne: "Takeout at Ortega" } },
       [
         {
           $set: {
@@ -37,19 +50,8 @@ async function cleanUpOutdatedMeals() {
                 input: "$days",
                 cond: {
                   $gte: [
-                    {
-                      $dateFromString: {
-                        dateString: {
-                          $dateToString: {
-                            date: {
-                              $dateFromString: { dateString: "$$this.day" },
-                            },
-                            format: "%Y-%m-%d",
-                          },
-                        },
-                      },
-                    },
-                    { $dateFromString: { dateString: todayISOString } },
+                    "$$this.day",
+                    todayFormatted,
                   ],
                 },
               },
@@ -58,14 +60,15 @@ async function cleanUpOutdatedMeals() {
         },
       ]
     );
-    console.log(`Updated ${result.modifiedCount} meal records`);
+    console.log(`Updated ${mealResult.modifiedCount} meal records`);
 
+    // Remove planned meals older than seven days ago in the Users collection
     const userResult = await Users.updateMany(
       {},
       {
         $pull: {
           plannedMeals: {
-            mealDate: { $lt: sevenDaysAgo },
+            mealDate: { $lt: sevenDaysAgoFormatted },
           },
         },
       }

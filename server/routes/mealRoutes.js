@@ -85,7 +85,6 @@ router.get("/primary-items", async (req, res) => {
     });
     let targetDate = new Intl.DateTimeFormat("en-US", {
       weekday: "long",
-      year: "numeric",
       month: "long",
       day: "numeric",
       timeZone: "America/Los_Angeles",
@@ -113,7 +112,6 @@ router.get("/primary-items", async (req, res) => {
 
       targetDate = new Intl.DateTimeFormat("en-US", {
         weekday: "long",
-        year: "numeric",
         month: "long",
         day: "numeric",
         timeZone: "America/Los_Angeles",

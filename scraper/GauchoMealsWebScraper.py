@@ -137,7 +137,7 @@ def getMenuItemsByCategory(driver):
         items_in_category = []
         while next_tr and "cbo_nn_itemGroupRow" not in next_tr.get("class", []):
             menu_item = next_tr.find("a").get_text().strip()
-            menu_item_link_element = wait.until(EC.presence_of_element_located((By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")))
+            menu_item_link_element = wait.until(EC.element_to_be_clickable((By.XPATH, f"//a[contains(text(), \"{menu_item}\") and @title='Open the nutrition label for this item']")))
             if menu_item_link_element:
                 time.sleep(1)
                 menu_item_link_element.click()
