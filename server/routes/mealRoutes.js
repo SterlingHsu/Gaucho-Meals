@@ -22,7 +22,12 @@ router.post("/save-meal", validateToken, async (req, res) => {
 
     const { diningHall, day, mealTime, items } = req.body;
 
-    const mealDate = new Date(day);
+    const mealDate = new Intl.DateTimeFormat("en-US", {
+      weekday: "long",
+      month: "long",
+      day: "numeric",
+      timeZone: "America/Los_Angeles",
+    }).format(new Date(day));
 
     const newMeal = {
       diningHall,
@@ -39,7 +44,7 @@ router.post("/save-meal", validateToken, async (req, res) => {
     }
 
     const insertIndex = user.plannedMeals.findIndex(
-      (meal) => new Date(meal.day) < mealDate
+      (meal) => new Date(meal.day) < new Date(mealDate)
     );
 
     const updateQuery = {
