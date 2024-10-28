@@ -125,9 +125,14 @@ const useMealPlanner = () => {
     else if (selectedDiningHall === "Takeout at Ortega")
       return ["Breakfast", "Lunch", "Dinner"];
     else {
-      const oldestDayRaw = meals.find(
+      const diningHallOldestDay = meals.find(
         (meal) => meal.diningHall === selectedDiningHall
-      ).days[0].day;
+      ).days[0];
+
+      if (!diningHallOldestDay) return [];
+
+      const oldestDayRaw = diningHallOldestDay.day;
+
       const oldestDay = new Date(oldestDayRaw);
 
       const currentSelectedDay = new Date(selectedDay);

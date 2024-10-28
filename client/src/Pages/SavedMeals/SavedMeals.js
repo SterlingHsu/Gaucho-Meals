@@ -215,7 +215,6 @@ const SavedMeals = () => {
       <style>{`
         .meal-date-group {
           background: white;
-          border-radius: 8px;
           overflow: hidden;
         }
 

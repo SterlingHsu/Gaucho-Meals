@@ -22,12 +22,16 @@ router.post("/save-meal", validateToken, async (req, res) => {
 
     const { diningHall, day, mealTime, items } = req.body;
 
+    const currentYear = new Date().getFullYear();
+    const formattedDay = `${day}, ${currentYear}`;
+
     const mealDate = new Intl.DateTimeFormat("en-US", {
       weekday: "long",
+      year: "numeric",
       month: "long",
       day: "numeric",
       timeZone: "America/Los_Angeles",
-    }).format(new Date(day));
+    }).format(new Date(formattedDay));
 
     const newMeal = {
       diningHall,
