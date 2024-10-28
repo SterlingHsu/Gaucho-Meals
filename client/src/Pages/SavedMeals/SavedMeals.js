@@ -285,26 +285,6 @@ const SavedMeals = () => {
           font-weight: 500;
         }
 
-        // .nutrition-badge.calories {
-        //   background: rgba(13, 110, 253, 0.1);
-        //   color: rgb(13, 110, 253);
-        // }
-
-        // .nutrition-badge.protein {
-        //   background: rgba(220, 53, 69, 0.1);
-        //   color: rgb(220, 53, 69);
-        // }
-
-        // .nutrition-badge.fat {
-        //   background: rgba(255, 193, 7, 0.1);
-        //   color: rgb(255, 193, 7);
-        // }
-
-        // .nutrition-badge.carbs {
-        //   background: rgba(25, 135, 84, 0.1);
-        //   color: rgb(25, 135, 84);
-        // }
-
         .empty-state-container {
           max-width: 400px;
           margin: 0 auto;
@@ -314,7 +294,6 @@ const SavedMeals = () => {
         .empty-state-image {
           max-width: 200px;
           height: auto;
-          opacity: 0.8;
         }
       `}</style>
     </>
