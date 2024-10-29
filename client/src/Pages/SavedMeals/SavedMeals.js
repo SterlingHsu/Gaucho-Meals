@@ -184,12 +184,12 @@ const SavedMeals = () => {
                         </div>
 
                         <div className="meal-card-nutrition py-2 px-3">
-                            <small style={{fontWeight: 500}}>
-                              Calories: {totalCalories.toFixed(0)}g | Protein:{" "}
-                              {totalProtein.toFixed(0)}g | Fat:{" "}
-                              {totalFat.toFixed(0)}g | Carbs:{" "}
-                              {totalCarbs.toFixed(0)}g
-                            </small>
+                          <small style={{ fontWeight: 500 }}>
+                            {totalCalories.toFixed(0)} Calories |{" "}
+                            {totalProtein.toFixed(0)}g Protein |{" "}
+                            {totalFat.toFixed(0)}g Fats | {totalCarbs.toFixed(0)}
+                            g Carbs
+                          </small>
                         </div>
 
                         <div className="meal-items-list">
