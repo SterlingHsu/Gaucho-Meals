@@ -156,7 +156,7 @@ const SavedMeals = () => {
                     calculateTotalNutrition(meal.items);
                   return (
                     <div key={mealIndex} className="col-md-6 col-lg-4">
-                      <div className="meal-card">
+                      <div className="card shadow-sm">
                         <div className="meal-card-header">
                           <div className="d-flex justify-content-between align-items-center">
                             <h5 className="mb-0 meal-title">
@@ -227,9 +227,8 @@ const SavedMeals = () => {
           background: #e8f4ff;
         }
 
-        .meal-card {
+        .card {
           background: white;
-          border: 1px solid #e9ecef;
           border-radius: 12px;
           box-shadow: 0 2px 4px rgba(0,0,0,0.04);
           transition: transform 0.2s;
