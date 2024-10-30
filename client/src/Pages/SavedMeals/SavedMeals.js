@@ -234,7 +234,7 @@ const SavedMeals = () => {
           transition: transform 0.2s;
         }
 
-        .meal-card:hover {
+        .card:hover {
           transform: translateY(-2px);
         }
 
