@@ -70,19 +70,19 @@ const MealCalculator = ({
         <h5 className="card-title mb-1">Nutritional Info</h5>
         <ul className="list-group list-group-flush mb-2">
           <li className="list-group-item d-flex justify-content-between">
-            <span>Calories:</span>
+            <span>Calories</span>
             <strong>{totalCalories.toFixed(0)}</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span>Protein:</span>
+            <span>Protein</span>
             <strong>{totalProtein.toFixed(0)}g</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span>Fat:</span>
+            <span>Fat</span>
             <strong>{totalFat.toFixed(0)}g</strong>
           </li>
           <li className="list-group-item d-flex justify-content-between">
-            <span>Carbs:</span>
+            <span>Carbs</span>
             <strong>{totalCarbs.toFixed(0)}g</strong>
           </li>
         </ul>
